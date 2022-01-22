@@ -61,17 +61,21 @@ export default {
   name: "MessageTestPage",
   data: () => {
     return {
-      registerURL: "http://localhost:8888/user/register",
-      loginURL: "http://localhost:8888/user/login",
-      selectURL: "http://localhost:8888/user/info",
-
-      wsURL: "ws://localhost:8888/websocket/",
-      sendMessageUrl: "http://localhost:8888/message/messagefilterandcluster",
+      hostAddress: "150.158.98.146:8888",
+      // hostAddress: "localhost:8888",
 
       websocket: null,
 
       messageData: {}
     }
+  },
+  computed: {
+    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
+    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
+    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+
+    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
   },
   methods: {
 
@@ -120,9 +124,9 @@ export default {
         let wsUUID = cookieArray[1]
         let wsToken = cookieArray[2]
 
-        this.wsURL = `${this.wsURL}${wsUsername}/${wsUUID}/${wsToken}`
-        console.log('wsurl', this.wsURL)
-        this.websocket = new WebSocket(this.wsURL);
+        let trueWsURL = `${this.wsURL}${wsUsername}/${wsUUID}/${wsToken}`
+        console.log('wsurl', trueWsURL)
+        this.websocket = new WebSocket(trueWsURL);
 
         //连接发生错误的回调方法
         this.websocket.onerror = () => {
@@ -138,9 +142,9 @@ export default {
           this.setMessageInnerHTML(event.data);
         }
         //连接关闭的回调方法
-        this.websocket.onclose = function(){
+        this.websocket.onclose = () => {
           this.setMessageInnerHTML("close");
-          this.wsURL = "ws://localhost:8888/websocket/"
+          trueWsURL = this.wsURL
         }
       }
       else{

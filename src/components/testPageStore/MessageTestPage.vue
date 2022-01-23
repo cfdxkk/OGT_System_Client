@@ -61,8 +61,8 @@ export default {
   name: "MessageTestPage",
   data: () => {
     return {
-      hostAddress: "150.158.98.146:8888",
-      // hostAddress: "localhost:8888",
+      // hostAddress: "150.158.98.146:8888",
+      hostAddress: "localhost:8888",
 
       websocket: null,
 
@@ -182,7 +182,7 @@ export default {
         // post Forever
 
         let flag = 1
-        const intervalTime = 100
+        const intervalTime = 1000
         let postInterval = setInterval(() => {
 
           // 拼接数据对象

@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
+// import header from "@/components/header/Header";
+// import content from "@/views/Content";
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    components: {
+      default: () => import("@/components/search/Search"),
+      header: () => import("@/components/header/Header"),
+      content: () => import("@/components/search/Search")
+    }
   },
   {
     path: '/about',
@@ -23,6 +29,24 @@ const routes = [
     path: '/message_test_page',
     name: 'MessageTestPage',
     component: () => import("@/components/testPageStore/MessageTestPage")
+  },
+  {
+    path: '/chat/:id',
+    name: 'Chats',
+    components: {
+      default: () => import("@/components/testPageStore/MessageTestPage"),
+      header: () => import("@/components/header/Header"),
+      content: () => import("@/components/testPageStore/MessageTestPage")
+    }
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    components: {
+      default: () => import("@/components/search/Search"),
+      header: () => import("@/components/header/Header"),
+      content: () => import("@/components/search/Search")
+    }
   }
 ]
 

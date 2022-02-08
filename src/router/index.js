@@ -34,9 +34,9 @@ const routes = [
     path: '/chat/:id',
     name: 'Chats',
     components: {
-      default: () => import("@/components/testPageStore/MessageTestPage"),
+      default: () => import("@/components/content/Content"),
       header: () => import("@/components/header/Header"),
-      content: () => import("@/components/testPageStore/MessageTestPage")
+      content: () => import("@/components/content/Content")
     }
   },
   {

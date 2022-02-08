@@ -29,6 +29,9 @@ export default {
   --zero-pixel: 0px;
 
   --header-height: 5vh;
+  --header-min-height: 30px;
+  --header-max-height: 70px;
+  --header-computed-height: clamp(var(--header-min-height), var(--header-height), var(--header-max-height));
 
   --left-sider-width-small: 3.6vw;
   --left-sider-min-width-small: 50px;
@@ -45,6 +48,10 @@ export default {
 
   --body-blue: #222C52FF;
   //--body-blue: #1aff00;
+
+  --event-back-ground-blue: #0C1639FF;
+
+  --event-blue: #172554FF;
 
   --search-bar: #2e4e7eFF;
 }

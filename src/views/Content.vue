@@ -13,10 +13,10 @@ export default {
 <style scoped>
 .contentBox {
   width: calc(var(--full-screen-width) - var(--left-sider-computed-width-small));
-  height: calc(var(--full-screen-height) - var(--header-height));
+  height: calc(var(--full-screen-height) - var(--header-computed-height));
 
   position: absolute;
-  top: var(--header-height);
+  top: var(--header-computed-height);
   left: var(--left-sider-computed-width-small);
 
   background-color: var(--body-blue);

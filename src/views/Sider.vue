@@ -38,10 +38,10 @@ export default {
 <style scoped>
 .leftSiderBox {
   width: var(--left-sider-computed-width-small);
-  height: calc(var(--full-screen-height) - var(--header-height));
+  height: calc(var(--full-screen-height) - var(--header-computed-height));
 
   position: absolute;
-  top: var(--header-height);
+  top: var(--header-computed-height);
   left: var(--zero);
 
   overflow-y: auto;

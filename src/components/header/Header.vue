@@ -19,7 +19,7 @@ export default {
 
 .headerBox {
   background-color: var(--sider-blue);
-  height: var(--header-height);
+  height: var(--header-computed-height);
   width: var(--full-screen-width);
 
   position: absolute;

@@ -1,11 +1,15 @@
 <template>
   <div id="timeLine" class="timeLineBox">
+
     <div id="timeLineLineBox" class="timeLineLineBox">
       <div id="timeLineLine" class="timeLineLine"></div>
     </div>
-    <div id="nowLineMask" class="nowLineMaksBox">
-      <div id="nowLineMaskLine" class="nowLineMaskLine"></div>
+
+    <div id="nowLineStartMask" class="nowLineStartMaksBox">
+      <div id="nowLineStartMaskLine" class="nowLineStartMaskLine"></div>
+      <div id="nowLineStartRectangle" class="nowLineStartRectangleBox"></div>
     </div>
+
     <div id="scale" class="scaleBox">
       <div id="timeLineFull" class="timeLineFullBox">
         <div id="scaleLeft" class="scaleLeftBox">
@@ -16,12 +20,20 @@
         <div id="scaleRight" class="scaleRightBox"></div>
 
         <div id="nowLine" class="nowLineBox">
-          <div id="nowLineLine" class="nowLineLine"></div>
+          <div id="nowLineLine" class="nowLineLine">
+            <div id="nowPoint" class="nowPointBox"></div>
+          </div>
         </div>
         <div id="eventLine" class="eventLineBox">
         </div>
       </div>
     </div>
+
+    <div id="nowLineEndMask" class="nowLineEndMaksBox">
+      <div id="nowLineEndMaskLine" class="nowLineEndMaskLine"></div>
+      <div id="nowLineEndTriangle" class="nowLineEndTriangleBox"></div>
+    </div>
+
   </div>
 </template>
 
@@ -30,29 +42,54 @@ export default {
 
 
   name: "TimeLine",
+  props: {
+    events: Array
+  },
   data: () => {
     return {
-      events: [
-        {
-          startTime: 1644330199000,
-          endTime: 1644333799000,
-          event: {
-            eventId: 1,
-            eventTitle: 'xeno',
-            eventText: 'go fight with xeno'
-          }
-        },
-        {
-          startTime: 1644337399000,
-          endTime: 1644348199000,
-          event: {
-            eventId: 1,
-            eventTitle: 'jump town',
-            eventText: 'go to the jump town'
-          }
-        },
-      ]
-
+      // events: [
+      //   {
+      //     eventId: 1,
+      //     startTime: 1644330199000,
+      //     endTime: 1644333799000,
+      //     eventColor: '#FFE666FF',
+      //     event: {
+      //       eventTitle: 'xeno',
+      //       eventText: 'go fight with xeno'
+      //     }
+      //   },
+      //   {
+      //     eventId: 2,
+      //     startTime: 1644337399000,
+      //     endTime: 1644348199000,
+      //     eventColor: '#ABFF66FF',
+      //     event: {
+      //       eventTitle: 'jump town',
+      //       eventText: 'go to the jump town'
+      //     }
+      //   },
+      //   {
+      //     eventId: 3,
+      //     startTime: 1644388143000,
+      //     endTime: 1644391743000,
+      //     eventColor: '#FF66CFFF',
+      //     event: {
+      //
+      //       eventTitle: 'jump town',
+      //       eventText: 'go to the jump town'
+      //     }
+      //   },
+      //   {
+      //     eventId: 4,
+      //     startTime: 1644431343000,
+      //     endTime: 1644434943000,
+      //     eventColor: '#66CCFFFF',
+      //     event: {
+      //       eventTitle: 'jump town',
+      //       eventText: 'go to the jump town'
+      //     }
+      //   },
+      // ]
     }
   },
   methods: {
@@ -61,7 +98,7 @@ export default {
 
       let nowLine = document.getElementById('nowLineLine')
       // let timeLineHeight = document.getElementById('scale').offsetHeight
-      setInterval(() => {
+      function showNowTileLine () {
         let nowDate = new Date()
         let nowHour = nowDate.getHours()
         let nowMinute = nowDate.getMinutes()
@@ -75,19 +112,22 @@ export default {
         }
         // nowLine.style.height = (timeLineHeight / 86400) * nowGameDateInSecond + "px"
         nowLine.style.height = nowGameDateInSecond / 86400 * 100 + "%"
-      },1000)
+      }
+      showNowTileLine()
+      setInterval(showNowTileLine,1000)
     },
     showEvent: function (){
       let eventLineBox = document.getElementById('eventLine')
       // let eventLineBoxHeight = eventLineBox.offsetHeight
 
-      if (this.events.length > 0){
-        this.events.forEach(event => {
+      if (this.$props.events.length > 0){
+        let zeroPointTime = new Date(new Date().toLocaleDateString()).getTime()
+        let timeLineTimeStart = zeroPointTime + (5 * 60 * 60 * 1000)
+        let timeLineTimeEnd = timeLineTimeStart + (24 * 60 * 60 * 1000)
+        let visibleEven = this.$props.events.filter(event => {return event.startTime > timeLineTimeStart && event.startTime < timeLineTimeEnd})
+        visibleEven.forEach(event => {
           let eventContinueTime = (event.endTime - event.startTime) / 1000
-          console.log('eventTime',eventContinueTime)
           let eventHeight = eventContinueTime / 86400 * 100 + "%"
-
-
           let eventStartDate = new Date(event.startTime)
           let eventStartHour = eventStartDate.getHours()
           let eventStartMinute = eventStartDate.getMinutes()
@@ -101,7 +141,7 @@ export default {
           }
           let eventTop = eventStartGameDateInSecond / 86400 * 100 + "%"
 
-          let newEvent = `<div style="position: absolute; top: ${eventTop}; width: var(--time-line-line-width); height: ${eventHeight}; background-color: #ff00ae;"></div>`
+          let newEvent = `<div style="position: absolute; top: ${eventTop}; width: var(--time-line-line-width); height: ${eventHeight}; background-color: ${event.eventColor};"></div>`
           eventLineBox.innerHTML += newEvent
         })
       }
@@ -121,6 +161,10 @@ export default {
 .timeLineBox {
   --time-line-width: 12%;
   --time-line-line-width: 7%;
+
+  --over-date-gray: #949494FF;
+  --future-date-orange: orange;
+  --scale-white: white;
 }
 
 .timeLineBox {
@@ -152,10 +196,10 @@ export default {
   width: var(--time-line-line-width);
   height: 100%;
 
-  background-color: orange;
+  background-color: var(--future-date-orange);
 }
 
-.nowLineMaksBox {
+.nowLineStartMaksBox {
   position: absolute;
   top: var(--zero-pixel);
   left: var(--zero-pixel);
@@ -167,17 +211,58 @@ export default {
   display: flex;
   justify-content: center;
 }
-.nowLineMaskLine {
+.nowLineStartMaskLine {
   width: var(--time-line-line-width);
   height: 100%;
 
-  background-color: #949494;
+  background-color: var(--over-date-gray);
+}
+.nowLineStartRectangleBox {
+  position: absolute;
+  top: var(--zero-pixel);
+
+  width: 40%;
+  height: 3px;
+
+  background-color: var(--over-date-gray);
 }
 
+.nowLineEndMaksBox {
+  position: absolute;
+  bottom: var(--zero-pixel);
+  left: var(--zero-pixel);
+
+  width: 100%;
+  height: 5%;
+  /*background-color: white;*/
+
+  display: flex;
+  justify-content: center;
+}
+.nowLineEndMaskLine {
+  position: absolute;
+  bottom: var(--zero-pixel);
+
+  width: 35%;
+  height: 35%;
+
+  background-color: var(--event-back-ground-blue);
+}
+.nowLineEndTriangleBox {
+  position: absolute;
+  bottom: var(--zero-pixel);
+
+  width: 35%;
+  height: 35%;
+
+  clip-path: polygon(0 -1px, 100% -1px, 50% 100%);
+
+  background-color: var(--future-date-orange);
+}
 
 .scaleBox {
   position: absolute;
-  top: 2%;
+  top: 1.25%;
 
   width: 100%;
   height: 96%;
@@ -243,7 +328,7 @@ export default {
   border-radius: 1px 1px;
 
   /*background-color: #b40000;*/
-  background-color: white;
+  background-color: var(--scale-white);
 }
 .nowLineBox {
   position: absolute;
@@ -259,10 +344,41 @@ export default {
 }
 
 .nowLineLine{
+  position: relative;
   width: var(--time-line-line-width);
   /*height: 30%;*/
 
-  background-color: #949494;
+  background-color: var(--over-date-gray);
+
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+.nowPointBox {
+  position: absolute;
+  bottom: 0px;
+
+
+  width: 10px;
+  height: 10px;
+
+  border-radius: 2px 2px;
+
+  -webkit-animation:myRotate 5s linear infinite;
+  animation:myRotate 5s linear infinite;
+
+  background-color: greenyellow;
+}
+/* anime keyframe */
+@-webkit-keyframes myRotate{
+  0%{ -webkit-transform: rotate(0deg);}
+  50%{ -webkit-transform: rotate(180deg);}
+  100%{ -webkit-transform: rotate(360deg);}
+}
+@keyframes myRotate{
+  0%{ -webkit-transform: rotate(0deg);}
+  50%{ -webkit-transform: rotate(180deg);}
+  100%{ -webkit-transform: rotate(360deg);}
 }
 
 .eventLineBox{

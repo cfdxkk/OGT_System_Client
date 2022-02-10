@@ -50,11 +50,11 @@ const routes = [
   },
   {
     path: '/create',
-    name: 'Search',
+    name: 'Create',
     components: {
       default: () => import("@/components/search/Search"),
       header: () => import("@/components/header/Header"),
-      content: () => import("@/components/search/Search")
+      content: () => import("@/components/create/Create")
     }
   }
 ]

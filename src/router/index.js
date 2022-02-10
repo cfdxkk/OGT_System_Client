@@ -47,6 +47,15 @@ const routes = [
       header: () => import("@/components/header/Header"),
       content: () => import("@/components/search/Search")
     }
+  },
+  {
+    path: '/create',
+    name: 'Search',
+    components: {
+      default: () => import("@/components/search/Search"),
+      header: () => import("@/components/header/Header"),
+      content: () => import("@/components/search/Search")
+    }
   }
 ]
 

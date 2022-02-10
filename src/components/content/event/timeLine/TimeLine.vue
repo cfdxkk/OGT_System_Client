@@ -45,53 +45,6 @@ export default {
   props: {
     events: Array
   },
-  data: () => {
-    return {
-      // events: [
-      //   {
-      //     eventId: 1,
-      //     startTime: 1644330199000,
-      //     endTime: 1644333799000,
-      //     eventColor: '#FFE666FF',
-      //     event: {
-      //       eventTitle: 'xeno',
-      //       eventText: 'go fight with xeno'
-      //     }
-      //   },
-      //   {
-      //     eventId: 2,
-      //     startTime: 1644337399000,
-      //     endTime: 1644348199000,
-      //     eventColor: '#ABFF66FF',
-      //     event: {
-      //       eventTitle: 'jump town',
-      //       eventText: 'go to the jump town'
-      //     }
-      //   },
-      //   {
-      //     eventId: 3,
-      //     startTime: 1644388143000,
-      //     endTime: 1644391743000,
-      //     eventColor: '#FF66CFFF',
-      //     event: {
-      //
-      //       eventTitle: 'jump town',
-      //       eventText: 'go to the jump town'
-      //     }
-      //   },
-      //   {
-      //     eventId: 4,
-      //     startTime: 1644431343000,
-      //     endTime: 1644434943000,
-      //     eventColor: '#66CCFFFF',
-      //     event: {
-      //       eventTitle: 'jump town',
-      //       eventText: 'go to the jump town'
-      //     }
-      //   },
-      // ]
-    }
-  },
   methods: {
 
     refreshNowTIme: function (){
@@ -124,8 +77,14 @@ export default {
         let zeroPointTime = new Date(new Date().toLocaleDateString()).getTime()
         let timeLineTimeStart = zeroPointTime + (5 * 60 * 60 * 1000)
         let timeLineTimeEnd = timeLineTimeStart + (24 * 60 * 60 * 1000)
-        let visibleEven = this.$props.events.filter(event => {return event.startTime > timeLineTimeStart && event.startTime < timeLineTimeEnd})
-        visibleEven.forEach(event => {
+        // 过滤掉不能在时间轴上显示的事件，即开始时间和结束时间都没有落在当天(5点-29点)上的日期
+        let visibleEvent = this.$props.events.filter(event => {
+          return (event.startTime > timeLineTimeStart && event.endTime < timeLineTimeEnd)  // 开始时间和结束时间都在时间轴上
+              || ((event.startTime > timeLineTimeStart && event.startTime < timeLineTimeEnd) && (event.endTime > timeLineTimeEnd))    // 开始时间在时间轴上，但是结束时间不在
+              || ((event.endTime > timeLineTimeStart && event.endTime < timeLineTimeEnd) && (event.startTime < timeLineTimeStart))    // 开始时间不在时间轴上，但是结束时间在
+              || (event.startTime < timeLineTimeStart && event.endTime > timeLineTimeEnd)  // 开始时间和结束时间都在时间轴外
+        })
+        visibleEvent.forEach(event => {
           let eventContinueTime = (event.endTime - event.startTime) / 1000
           let eventHeight = eventContinueTime / 86400 * 100 + "%"
           let eventStartDate = new Date(event.startTime)
@@ -141,7 +100,20 @@ export default {
           }
           let eventTop = eventStartGameDateInSecond / 86400 * 100 + "%"
 
-          let newEvent = `<div style="position: absolute; top: ${eventTop}; width: var(--time-line-line-width); height: ${eventHeight}; background-color: ${event.eventColor};"></div>`
+          let newEvent
+          if(event.startTime > timeLineTimeStart && event.endTime < timeLineTimeEnd) {  // 开始时间和结束时间都在时间轴上
+            newEvent = `<div style="position: absolute; top: ${eventTop}; width: var(--time-line-line-width); height: ${eventHeight}; background-color: ${event.eventColor};"></div>`
+          } else if((event.startTime > timeLineTimeStart && event.startTime < timeLineTimeEnd) && (event.endTime > timeLineTimeEnd)) { // 开始时间在时间轴上，但是结束时间不在
+            newEvent = `<div style="position: absolute; top: ${eventTop}; width: var(--time-line-line-width); height: 100%; background-color: ${event.eventColor};"></div>`
+          } else if((event.endTime > timeLineTimeStart && event.endTime < timeLineTimeEnd) && (event.startTime < timeLineTimeStart)) { // 开始时间不在时间轴上，但是结束时间在
+            eventContinueTime = (event.endTime - timeLineTimeStart) / 1000
+            eventHeight = eventContinueTime / 86400 * 100 + "%"
+            newEvent = `<div style="position: absolute; top: var(--zero-pixel); width: var(--time-line-line-width); height: ${eventHeight}; background-color: ${event.eventColor};"></div>`
+          } else if(event.startTime < timeLineTimeStart && event.endTime > timeLineTimeEnd) { // 开始时间和结束时间都在时间轴外
+            newEvent = `<div style="position: absolute; top: var(--zero-pixel); width: var(--time-line-line-width); height: 100%; background-color: ${event.eventColor};"></div>`
+          }
+
+
           eventLineBox.innerHTML += newEvent
         })
       }
@@ -356,7 +328,7 @@ export default {
 }
 .nowPointBox {
   position: absolute;
-  bottom: 0px;
+  bottom: -5px;
 
 
   width: 10px;
@@ -366,6 +338,8 @@ export default {
 
   -webkit-animation:myRotate 5s linear infinite;
   animation:myRotate 5s linear infinite;
+
+  z-index: var(--top-layer);
 
   background-color: greenyellow;
 }

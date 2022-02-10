@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.25.0",
     "core-js": "^3.6.5",
+    "element-plus": "^2.0.1",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0",
     "vue-axios": "^3.4.0",

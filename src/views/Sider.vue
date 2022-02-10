@@ -19,6 +19,7 @@
     <chat-list goto="/chat/test16" name="test16" ></chat-list>
     <chat-list goto="/chat/test17" name="test17" ></chat-list>
     <chat-list goto="/chat/test18" name="test18" ></chat-list>
+    <chat-list goto="/create" name="create" ></chat-list>
 
 
   </div>

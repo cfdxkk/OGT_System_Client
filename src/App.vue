@@ -57,9 +57,12 @@ export default {
 }
 /* z-index */
 :root {
-
   --top-layer: 1000;
   --after-top-layer-1: 999;
+}
+/* font */
+:root {
+  --default-font: Arial,Helvetica,sans-serif;
 }
 
 body {

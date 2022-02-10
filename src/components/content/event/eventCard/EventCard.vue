@@ -26,8 +26,8 @@
       <div class="userBoxBottomBorder"></div>
     </div>
     <div class="textBox">
-      <div class="eventTitle" v-if="!!this.$props.event.event.eventTitle" :title="this.$props.event.event.eventTitle">{{this.$props.event.event.eventTitle}}</div>
-      <div class="eventText" v-if="!!this.$props.event.event.eventText">{{this.$props.event.event.eventText}}</div>
+      <div class="eventTitle" v-if="!!this.$props.event.eventTitle" :title="this.$props.event.eventTitle">{{this.$props.event.eventTitle}}</div>
+      <div class="eventText" v-if="!!this.$props.event.eventText">{{this.$props.event.eventText}}</div>
     </div>
   </div>
 </template>
@@ -40,9 +40,6 @@ export default {
   },
   methods: {
 
-  },
-  mounted() {
-    console.log("event",this.$props.event);
   }
 }
 </script>

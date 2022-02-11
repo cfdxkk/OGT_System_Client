@@ -7,16 +7,65 @@
     </div>
     <div id="searchPart" class="searchPartBox">
       <div id="searchBar" class="searchBarBox">
-        <input type="text" class="searchInputBox" @focus="inputBoxOn" @blur="inputBoxOut">
+        <input type="text" id="searchInputBox" class="searchInputBox" @focus="inputBoxOn" @blur="inputBoxOut" @keyup.enter="searchGrooupByName">
       </div>
     </div>
-  </div>
 
+    <div class="resultGroupPart">
+      <div class="resultGroupBox">
+        <div class="resultGroupCard" v-for="group in this.groups" :key="group">
+          <div class="groupImage"><div class="groupImageCard">{{group.groupImage}}</div></div>
+          <div class="groupText">
+            <div class="groupNameCard">{{group.groupName}}</div>
+            <div class="groupIntroduceCard">{{group.groupIntroduction}}</div>
+          </div>
+          <div class="joinGroup"><div class="joinGroupCard" @click="joinGroup(group.groupId)">+加入</div></div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
 </template>
 
 <script>
 export default {
   name: "SearchBar",
+  data: () => {
+    return {
+      // groups: [
+      //   {
+      //     groupName: 'aaaa',
+      //     groupIntroduction: 'bbbbbbbbbbbbbbbbbbbb',
+      //     groupImage: 'cccc.jpg'
+      //   },
+      //   {
+      //     groupName: 'dddd',
+      //     groupIntroduction: 'eeeeeeeeeeeeeeeeeeeeeee',
+      //     groupImage: 'ffff.jpg'
+      //   }
+      // ],
+      groups: [],
+
+
+
+      // hostAddress: "150.158.98.146:8888",
+      hostAddress: "localhost:8888",
+    }
+  },
+  computed: {
+    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
+    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
+    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+
+    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
+
+    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+
+    getGroupsByNameUrl(){ return "http://" + this.hostAddress + "/group/search?groupName="},
+    joinGroupUrl(){ return "http://" + this.hostAddress + "/group/join"}
+  },
   methods: {
     inputBoxOn: () => {
       let inputBox = document.getElementById('searchBar')
@@ -29,6 +78,30 @@ export default {
       if (inputBox !== null) {
         inputBox.style.boxShadow = ''
       }
+    },
+    searchGrooupByName: function (){
+      // console.log('search!')
+      let groupName = document.getElementById('searchInputBox').value
+      this.Axios.get(this.getGroupsByNameUrl + groupName).then(groups => {
+        console.log('groups',groups.data)
+        this.groups = groups.data
+      })
+    },
+    joinGroup: function (groupId){
+
+      // 从cookie中获取uuid
+      let cookieArray = (document.cookie.split('=')[1]).split('-');
+      let UUID = cookieArray[1]
+
+      let groupRelationship = {
+        groupId,
+        userId:UUID
+      }
+      this.Axios.post(this.joinGroupUrl,groupRelationship).then(data => {
+        if (data.data.length !== 0 || data.data !== '' || data.data !== null) {
+          console.log(data.data)
+        }
+      })
     }
   }
 }
@@ -44,6 +117,15 @@ export default {
   --searchTextBoxTop: 60px;
 
   --inputOffsite: 20px;
+}
+
+.searchBarAndTextBox {
+  --create-box-little-gray-white: #F5F5F5FF;
+  --create-box-little-blue-white: #8697CEFC;
+  --user-box-bottom-line-blue: #8697CE47;
+  --add-event-box-blue: #19275DFF;
+
+  --group-input-back-ground-color: #2F3D6AFF;
 }
 
 .searchPartBox {
@@ -114,5 +196,141 @@ export default {
 
   z-index: calc(var(--top-layer) - 4);
 }
+
+
+.resultGroupPart {
+  position: relative;
+  top: 200px;
+
+  width: 100%;
+
+  display: grid;
+  justify-items: center;
+}
+
+
+.resultGroupBox {
+
+  /*height: 200px;*/
+  width: var(--searchBarBoxWidth);
+  /*background-color: orange;*/
+
+  display: grid;
+  justify-items: center;
+}
+
+.resultGroupCard {
+
+  position: relative;
+
+  width: 100%;
+  height: 150px;
+
+  margin-top: 20px;
+
+  background-color: var(--search-bar);
+
+  /*border: 4px solid var(--create-box-little-blue-white);*/
+  border-radius: 20px 20px;
+}
+
+.groupImage {
+  position: absolute;
+  top: 0;
+  left: 2%;
+
+  width: 30%;
+  height: 100%;
+
+  display: grid;
+  align-items: center;
+}
+
+.groupImageCard {
+  width: 100%;
+  height: 80%;
+  background-color: gray;
+  border-radius: 10px 10px;
+
+  color: white;
+
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+
+
+.groupText {
+  position: absolute;
+  top: 0;
+  left: 34%;
+
+  width: 45%;
+  height: 100%;
+
+
+}
+
+.groupNameCard {
+  position: relative;
+  top: 25px;
+
+  font-size: 30px;
+  font-family: var(--default-font);
+  color: var(--create-box-little-blue-white);
+}
+
+.groupIntroduceCard {
+  position: relative;
+  top: 35px;
+
+  font-size: 20px;
+  font-family: var(--default-font);
+  color: var(--create-box-little-blue-white);
+}
+
+
+
+
+.joinGroup {
+  position: absolute;
+  top: 0;
+  left: 81%;
+
+  width: 30%;
+  height: 100%;
+
+  display: grid;
+  align-items: center;
+}
+
+.joinGroupCard {
+  width: 100px;
+  height: 40px;
+
+
+  font-size: 18px;
+  font-family: var(--default-font);
+  color: var(--create-box-little-blue-white);
+  border: 2px solid var(--create-box-little-blue-white);
+  border-radius: 5px 5px;
+  background-color: var(--group-input-back-ground-color);
+  cursor: pointer;
+
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.joinGroupCard:hover {
+  color: var(--good-green);
+  border: 2px solid var(--good-dark-green);
+  background-color: var(--good-dark-green-alpha);
+}
+
+
+
+
 
 </style>

@@ -339,7 +339,7 @@ export default {
   -webkit-animation:myRotate 5s linear infinite;
   animation:myRotate 5s linear infinite;
 
-  z-index: var(--top-layer);
+  z-index: calc(var(--top-layer) - 20);
 
   background-color: greenyellow;
 }

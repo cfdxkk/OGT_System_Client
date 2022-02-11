@@ -53,7 +53,15 @@ export default {
 
   --event-blue: #172554FF;
 
-  --search-bar: #2e4e7eFF;
+  --search-bar: #2E4E7EFF;
+
+  --danger-red: #960043FF;
+  --danger-dark-red: #6E001DFF;
+  --danger-dark-red-alpha: #6E001D55;
+
+  --good-green: #00bE6E;
+  --good-dark-green: #007E4d;
+  --good-dark-green-alpha: #00573555;
 }
 /* z-index */
 :root {

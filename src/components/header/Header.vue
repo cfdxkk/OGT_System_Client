@@ -1,17 +1,17 @@
 <template>
   <div id="header" class="headerBox">
-<!--    <router-link to="/">Home</router-link>-->
-<!--    <router-link to="/about" class="paddingLeft20">About</router-link>-->
-<!--    <router-link to="/main" class="paddingLeft20">主页</router-link>-->
-<!--    <router-link to="/message_test_page" class="paddingLeft20">test page</router-link>-->
-
     <div class="headerTitle">ogt_system_header - {{this.$route.path.split('/').slice(-1)[0]}}</div>
+    <user-info></user-info>
   </div>
 </template>
 
 <script>
+import userInfo from "@/components/header/userInfo/UserInfo";
 export default {
-  name: "header"
+  name: "header",
+  components: {
+    userInfo
+  }
 }
 </script>
 

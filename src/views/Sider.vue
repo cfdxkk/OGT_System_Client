@@ -1,24 +1,7 @@
 <template>
   <div id="leftSider" class="leftSiderBox">
     <chat-list goto="/search" name="search" ></chat-list>
-    <chat-list goto="/chat/test1" name="test1" ></chat-list>
-    <chat-list goto="/chat/test2" name="test2" ></chat-list>
-    <chat-list goto="/chat/test3" name="test3" ></chat-list>
-    <chat-list goto="/chat/test4" name="test4" ></chat-list>
-    <chat-list goto="/chat/test5" name="test5" ></chat-list>
-    <chat-list goto="/chat/test6" name="test6" ></chat-list>
-    <chat-list goto="/chat/test7" name="test7" ></chat-list>
-    <chat-list goto="/chat/test8" name="test8" ></chat-list>
-    <chat-list goto="/chat/test9" name="test9" ></chat-list>
-    <chat-list goto="/chat/test10" name="test10" ></chat-list>
-    <chat-list goto="/chat/test11" name="test11" ></chat-list>
-    <chat-list goto="/chat/test12" name="test12" ></chat-list>
-    <chat-list goto="/chat/test13" name="test13" ></chat-list>
-    <chat-list goto="/chat/test14" name="test14" ></chat-list>
-    <chat-list goto="/chat/test15" name="test15" ></chat-list>
-    <chat-list goto="/chat/test16" name="test16" ></chat-list>
-    <chat-list goto="/chat/test17" name="test17" ></chat-list>
-    <chat-list goto="/chat/test18" name="test18" ></chat-list>
+    <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :name="group.groupName" ></chat-list>
     <chat-list goto="/create" name="create" ></chat-list>
 
 
@@ -30,8 +13,48 @@ import chatList from "@/components/leftList/chatListItem";
 
 export default {
   name: "leftSider",
+  data: () => {
+    return {
+      groupList: [],
+
+
+      // hostAddress: "150.158.98.146:8888",
+      hostAddress: "localhost:8888",
+
+    }
+  },
+  computed: {
+    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
+    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
+    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+
+    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
+
+    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+
+    getGroupsByNameUrl(){ return "http://" + this.hostAddress + "/group/search?groupName="},
+    joinGroupUrl(){ return "http://" + this.hostAddress + "/group/join"},
+    getGroupListUrl(){ return "http://" + this.hostAddress + "/group?userId="},
+  },
   components: {
     chatList
+  },
+  methods: {
+    getGroupList: function (){
+      // 从cookie中获取uuid
+      let cookieArray = (document.cookie.split('=')[1]).split('-');
+      let userId = cookieArray[1]
+
+      this.Axios.get(this.getGroupListUrl + userId).then(groups => {
+        console.log('groupsList',groups.data)
+        this.groupList = groups.data
+      })
+
+    }
+  },
+  mounted() {
+    this.getGroupList()
   }
 }
 </script>

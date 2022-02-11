@@ -524,7 +524,7 @@ export default {
   font-size: var(--add-event-icon-size);
   color: var(--add-event-box-little-blue-white);
 
-  z-index: var(--top-layer);
+  z-index: calc(var(--top-layer) - 5);
   display: grid;
   align-items: center;
   justify-items: center;

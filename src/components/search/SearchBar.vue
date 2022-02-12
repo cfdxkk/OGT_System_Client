@@ -89,19 +89,24 @@ export default {
     },
     joinGroup: function (groupId){
 
-      // 从cookie中获取uuid
-      let cookieArray = (document.cookie.split('=')[1]).split('-');
-      let UUID = cookieArray[1]
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和tokey
+        let cookieArray = (cookie.split('=')[1]).split('-');
+        let UUID = cookieArray[1]
 
-      let groupRelationship = {
-        groupId,
-        userId:UUID
-      }
-      this.Axios.post(this.joinGroupUrl,groupRelationship).then(data => {
-        if (data.data.length !== 0 || data.data !== '' || data.data !== null) {
-          console.log(data.data)
+        let groupRelationship = {
+          groupId,
+          userId: UUID
         }
-      })
+        this.Axios.post(this.joinGroupUrl, groupRelationship).then(groups => {
+          if (groups.data.length !== 0 || groups.data !== '' || groups.data !== null) {
+            this.$store.commit('updateGroupList', groups.data)
+            this.$router.push(`/chat/${groupId}`)
+            // console.log(groups.data)
+          }
+        })
+      }
     }
   }
 }

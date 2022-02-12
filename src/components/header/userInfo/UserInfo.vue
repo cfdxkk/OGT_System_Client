@@ -88,7 +88,10 @@ export default {
     wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
     sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
 
-    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"}
+    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+
+    getGroupListUrl(){ return "http://" + this.hostAddress + "/group?userId="},
+    checkTokenUrl(){ return "http://" + this.hostAddress + "/user/tokenCheck"}
   },
   methods: {
     openSignInPopup: function (){
@@ -120,6 +123,7 @@ export default {
         document.cookie = cookieStr
         this.signInVisible = false
         this.logged = true
+        this.checkLoginStatus()
       })
     },
     //注册
@@ -137,9 +141,38 @@ export default {
         console.log('register status', data.data)
       })
     },
+    checkLoginStatus (){
+      // 获取cookie
+      let cookie = document.cookie
+      if (cookie !== ''){
+        // 从cookie中获取uuid和tokey
+        let cookieArray = (cookie.split('=')[1]).split('-');
+        let username = cookieArray[0]
+        let UUID = cookieArray[1]
+        let token = cookieArray[2]
+
+        let checkTokenData = {
+          userId: UUID,
+          userToken: token
+        }
+
+        this.Axios.post(this.checkTokenUrl,checkTokenData).then(data => {
+          if (data.data === true){
+            this.username = username
+            this.logged = true
+            this.Axios.get(this.getGroupListUrl + UUID).then(groups => {
+              this.$store.commit('updateGroupList',groups.data)
+            })
+          }
+        })
+      }
+
+
+    }
 
   },
   mounted() {
+    this.checkLoginStatus()
   }
 }
 </script>

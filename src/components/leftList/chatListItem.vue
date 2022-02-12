@@ -20,6 +20,9 @@ export default {
     name: {
       type: String
     },
+    itemId: {
+      type: String
+    },
     img: {
       type: String
     },
@@ -36,8 +39,9 @@ export default {
     $route(to){
       let url = to.path
       let chatId = url.split('/').slice(-1)[0]
-      if(chatId !== null) {
-        if(chatId === this.$props.name) {
+      if(chatId !== '') {
+        if(chatId === this.$props.itemId) {
+          console.log('isActive')
           this.isActive = true
         } else {
           this.isActive = false

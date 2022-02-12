@@ -1,8 +1,8 @@
 <template>
   <div id="leftSider" class="leftSiderBox">
-    <chat-list goto="/search" name="search" ></chat-list>
-    <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :name="group.groupName" ></chat-list>
-    <chat-list goto="/create" name="create" ></chat-list>
+    <chat-list goto="/search" itemId="search" name="search" ></chat-list>
+    <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :itemId="group.groupId" :name="group.groupName" ></chat-list>
+    <chat-list goto="/create" itemId="create" name="create" ></chat-list>
 
 
   </div>
@@ -15,7 +15,7 @@ export default {
   name: "leftSider",
   data: () => {
     return {
-      groupList: [],
+      // groupList: [],
 
 
       // hostAddress: "150.158.98.146:8888",
@@ -36,21 +36,26 @@ export default {
     getGroupsByNameUrl(){ return "http://" + this.hostAddress + "/group/search?groupName="},
     joinGroupUrl(){ return "http://" + this.hostAddress + "/group/join"},
     getGroupListUrl(){ return "http://" + this.hostAddress + "/group?userId="},
+
+    groupList(){ return this.$store.state.groupList}
+
   },
   components: {
     chatList
   },
   methods: {
     getGroupList: function (){
-      // 从cookie中获取uuid
-      let cookieArray = (document.cookie.split('=')[1]).split('-');
-      let userId = cookieArray[1]
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和tokey
+        let cookieArray = (cookie.split('=')[1]).split('-');
+        let userId = cookieArray[1]
 
-      this.Axios.get(this.getGroupListUrl + userId).then(groups => {
-        console.log('groupsList',groups.data)
-        this.groupList = groups.data
-      })
-
+        this.Axios.get(this.getGroupListUrl + userId).then(groups => {
+          // console.log('groupsList',groups.data)
+          this.$store.commit('updateGroupList', groups.data)
+        })
+      }
     }
   },
   mounted() {

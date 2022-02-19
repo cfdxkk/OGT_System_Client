@@ -34,8 +34,8 @@ export default {
   --header-computed-height: clamp(var(--header-min-height), var(--header-height), var(--header-max-height));
 
   --left-sider-width-small: 3.6vw;
-  --left-sider-min-width-small: 50px;
-  --left-sider-max-width-small: 100px;
+  --left-sider-min-width-small: 45px;
+  --left-sider-max-width-small: 65px;
   --left-sider-computed-width-small: clamp(var(--left-sider-min-width-small), var(--left-sider-width-small), var(--left-sider-max-width-small));
 }
 /* colors */

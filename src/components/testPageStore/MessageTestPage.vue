@@ -6,6 +6,7 @@
     <button @click="select">测试数据</button>
     <button @click="getAndSaveMessage">测试IndexedDB</button>
     <button @click="testGetOfflineMessage">测试离线消息</button>
+    <button @click="testGroupMessage">测试群聊消息</button>
 
     <div id="registerPart">
       <p>here we test register</p>
@@ -81,7 +82,9 @@ export default {
     wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
     sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
 
-    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"}
+    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+
+    groupMessageUrl() {return "http://" + this.hostAddress + "/group/message"}
   },
   methods: {
 
@@ -440,6 +443,30 @@ export default {
         })
       })
       console.log("testGetOfflineMessage end")
+    },
+    // 测试群聊消息
+    testGroupMessage() {
+
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和tokey
+        let cookieArray = (cookie.split('=')[1]).split('-');
+        let userId = cookieArray[1]
+        let token = cookieArray[2]
+        let message = {
+          groupIdFrom: '273b0fcfee4048df91890422511c7da1',
+          uuidFrom: userId,
+          token: token,
+          messageType: '1',
+          message: 'aaaaaaaaaaaaaa',
+
+        }
+        this.Axios.post(this.groupMessageUrl, message).then( data => {
+          console.log(data.data);
+        })
+
+      }
+
     }
   },
   mounted() {

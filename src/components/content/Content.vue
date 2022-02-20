@@ -1,15 +1,18 @@
 <template>
   <div id="content" class="contentBox">
     <event></event>
+    <message></message>
   </div>
 </template>
 
 <script>
 import event from "@/components/content/event/Event";
+import message from "@/components/content/message/Message";
 export default {
   name: "Content",
   components: {
-    event
+    event,
+    message
   }
 }
 </script>

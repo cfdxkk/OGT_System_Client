@@ -74,13 +74,6 @@ export default {
 
 <style scoped>
 .eventBox {
-  --event-box-width: 23vw;
-  --event-box-min-width: 350px;
-  --event-box-max-width: 450px;
-  --event-box-computed-width: clamp(var(--event-box-min-width), var(--event-box-width), var(--event-box-max-width))
-
-}
-.eventBox {
   position: absolute;
   right: var(--zero-pixel);
   top: var(--zero-pixel);

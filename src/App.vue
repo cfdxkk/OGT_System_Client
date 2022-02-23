@@ -1,4 +1,8 @@
 <template>
+
+  <meta http-equiv="Content-Language" content="zh" />
+  <meta charset="utf-8" />
+
   <ogt-header></ogt-header>
   <ogt-left-sider></ogt-left-sider>
   <ogt-content></ogt-content>
@@ -10,7 +14,6 @@ import content from "@/views/Content";
 
 export default {
   name: "App",
-
   components: {
     ogtHeader: RoutedHeader,
     ogtLeftSider: Sider,
@@ -28,15 +31,23 @@ export default {
   --zero: 0;
   --zero-pixel: 0px;
 
+  //header height
   --header-height: 5vh;
   --header-min-height: 30px;
   --header-max-height: 70px;
   --header-computed-height: clamp(var(--header-min-height), var(--header-height), var(--header-max-height));
 
+  //sider width
   --left-sider-width-small: 3.6vw;
   --left-sider-min-width-small: 45px;
   --left-sider-max-width-small: 65px;
   --left-sider-computed-width-small: clamp(var(--left-sider-min-width-small), var(--left-sider-width-small), var(--left-sider-max-width-small));
+
+  //event width
+  --event-box-width: 23vw;
+  --event-box-min-width: 350px;
+  --event-box-max-width: 450px;
+  --event-box-computed-width: clamp(var(--event-box-min-width), var(--event-box-width), var(--event-box-max-width))
 }
 /* colors */
 :root {

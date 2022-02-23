@@ -56,6 +56,14 @@ const routes = [
       header: () => import("@/components/header/Header"),
       content: () => import("@/components/create/Create")
     }
+  },
+  {
+    path: '/testpage',
+    name: 'TestPage',
+    components: {
+      header: () => import("@/components/header/Header"),
+      content: () => import("@/components/testPageStore/MessageTestPage")
+    }
   }
 ]
 

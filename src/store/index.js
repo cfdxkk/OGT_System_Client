@@ -2,10 +2,10 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    // wsServerAddress: "localhost:8888",
-    // serverAddress: "localhost:8888",
-    hostAddress: "150.158.98.146:8888",
-    serverAddress: "150.158.98.146:8888",
+    wsServerAddress: "localhost:8888",
+    serverAddress: "localhost:8888",
+    // hostAddress: "150.158.98.146:8888",
+    // serverAddress: "150.158.98.146:8888",
     groupList: [],
     offlineMessage: {},
     activeGroupMessage: [],

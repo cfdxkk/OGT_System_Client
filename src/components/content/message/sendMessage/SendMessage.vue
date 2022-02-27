@@ -17,16 +17,16 @@ export default {
     }
   },
   computed: {
-    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
-    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
-    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+    registerURL(){ return "http://" + this.$store.state.serverAddress + "/user/register"},
+    loginURL(){ return "http://" + this.$store.state.serverAddress + "/user/login"},
+    selectURL(){ return "http://" + this.$store.state.serverAddress + "/user/info"},
 
-    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
-    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
+    wsURL(){ return "ws://" + this.$store.state.wsServerAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/message/messagefilterandcluster"},
 
-    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+    offlineMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/messagepull/getofflinemessage"},
 
-    groupMessageUrl() {return "http://" + this.hostAddress + "/group/message"}
+    groupMessageUrl() {return "http://" + this.$store.state.serverAddress + "/group/message"}
   },
   methods: {
     sentMessageBoxInAnime() {
@@ -102,6 +102,7 @@ export default {
       if (cookie !== '') {
         // 从cookie中获取uuid和tokey
         let cookieArray = (cookie.split('=')[1]).split('-');
+        let username = cookieArray[0]
         let userId = cookieArray[1]
         let token = cookieArray[2]
 
@@ -112,13 +113,57 @@ export default {
         let message = {
           groupIdFrom: groupId,
           uuidFrom: userId,
+          usernameFrom: username,
           token: token,
+          messageType: '1',
+          message: messageInput,
+        }
+
+        let messagePrivate = {
+          selfMessage: true,
+          messageNoInGroup: 0,
+          groupIdFrom: groupId,
+          uuidFrom: userId,
+          usernameFrom: username,
           messageType: '1',
           message: messageInput,
 
         }
-        this.Axios.post(this.groupMessageUrl, message).then( data => {
-          console.log(data.data);
+
+        console.log('tttttttttttttttttttttttttttttest',messagePrivate);
+        let _this = this
+        this.Axios.post(this.groupMessageUrl, message).then( result => {
+          console.log(result.data);
+          if (result.data === true){  // 如果消息发送成功
+            // 加入到自己的indexeddb中
+            _this.Dexie.groupMessages.where('groupIdFrom').equals(groupId).toArray().then(groupMessages => {  // 根据groupId获取indexedDB原来的数据
+              if (groupMessages.length === 0){  // 如果 indexedDB 里没有这个群组的消息数据, 插入刚发送的消息
+                // 插入到indexedDB中
+                _this.Dexie.groupMessages.put({
+                  'groupIdFrom': groupId,
+                  'messages': [messagePrivate]
+                })
+                // 加入到vuex活动群组消息中
+                _this.$store.commit('updateActiveGroupMessage', [messagePrivate])
+              } else { // 如果indexedDB里有这个群组的历史数据，把刚发送的新消息拼接到原来的消息尾部，然后再插入(一个群聊最多50条)
+
+                // 计算出正确的消息顺序号
+                messagePrivate.messageNoInGroup = parseInt(groupMessages[0].messages.slice(-1)[0].messageNoInGroup) + 1 + ''
+                let newOfflineMessages = groupMessages[0].messages.concat([messagePrivate]).slice(-50)
+
+                // 插入到indexedDB中
+                _this.Dexie.groupMessages.put({
+                  'groupIdFrom': groupId,
+                  'messages': newOfflineMessages
+                })
+                // 加入到vuex活动群组消息中
+                _this.$store.commit('updateActiveGroupMessage', newOfflineMessages)
+              }
+            })
+
+
+          }
+
         })
 
       }
@@ -149,7 +194,7 @@ export default {
   left: var(--zero-pixel);
   bottom: var(--zero-pixel);
 
-  height: 70px;
+  height: var(--sent-message-box-height);
   width: 100%;
 
   /*background-color: greenyellow;*/

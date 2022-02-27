@@ -1,59 +1,40 @@
 <template>
-  <div>
-    <button @click="getOfflineMessage">获取离线消息</button>
-  </div>
+    <div class="showMessageBox">
+        <message-item v-for="message in activeGroupMessage" :key="message" :message="message"></message-item>
+    </div>
 </template>
 
 <script>
+import messageItem from "@/components/content/message/showMessage/MessageItem";
 export default {
   name: "ShowMessage",
+  components: {
+    messageItem
+  },
   data: () => {
     return {
       // hostAddress: "150.158.98.146:8888",
-      hostAddress: "localhost:8888",
-
-
-      message: []
+      hostAddress: "localhost:8888"
     }
   },
   computed: {
-    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
-    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
-    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+    activeGroupMessage() {return this.$store.state.activeGroupMessage},
 
-    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
-    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
 
-    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+    registerURL(){ return "http://" + this.$store.state.serverAddress + "/user/register"},
+    loginURL(){ return "http://" + this.$store.state.serverAddress + "/user/login"},
+    selectURL(){ return "http://" + this.$store.state.serverAddress + "/user/info"},
 
-    groupMessageUrl() {return "http://" + this.hostAddress + "/group/message"},
+    wsURL(){ return "ws://" + this.$store.state.wsServerAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/message/messagefilterandcluster"},
 
-    groupOfflineMessageUrl() {return "http://" + this.hostAddress + "/group/offlineMessage"}
+    offlineMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/messagepull/getofflinemessage"},
+
+    groupMessageUrl() {return "http://" + this.$store.state.serverAddress + "/group/message"},
+
+    groupOfflineMessageUrl() {return "http://" + this.$store.state.serverAddress + "/group/offlineMessage"}
   },
   methods: {
-    getOfflineMessage() {
-      let cookie = document.cookie
-      if (cookie !== '') {
-        // 从cookie中获取uuid和tokey
-        let cookieArray = (cookie.split('=')[1]).split('-');
-        let userId = cookieArray[1]
-        let token = cookieArray[2]
-
-        // 从路由中获取群聊ID
-        let groupId = this.$route.path.split('/').slice(-1)[0]
-
-        let groupMessageUserInfo = {
-          uuidTo: userId,
-          groupIdFrom: groupId,
-          token
-
-        }
-
-        this.Axios.post(this.groupOfflineMessageUrl, groupMessageUserInfo).then(offlineMessage => {
-          console.log("offlineMessage is: ", offlineMessage.data)
-        })
-      }
-    }
   },
   mounted() {
 
@@ -62,5 +43,38 @@ export default {
 </script>
 
 <style scoped>
+
+.showMessageBox {
+  position: absolute;
+  bottom: var(--sent-message-box-height);
+  left: var(--zero-pixel);
+
+  width: 100%;
+  height: calc(100vh - var(--sent-message-box-height) - var(--header-height));
+
+  overflow-y: auto;
+
+
+}
+
+/* 修改滚动条样式 */
+.showMessageBox::-webkit-scrollbar {
+  width: 6px;
+  background-color: var(--event-back-ground-blue);
+}
+.showMessageBox::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: #FFFFFF10;
+}
+.showMessageBox::-webkit-scrollbar-thumb:hover {
+  background-color: #FFFFFF5A;
+}
+.showMessageBox::-webkit-scrollbar-track {
+  border-radius: 6px;
+  background-color: #FFFFFF10;
+}
+.showMessageBox::-webkit-scrollbar-track:hover {
+  background-color: #FFFFFF12;
+}
 
 </style>

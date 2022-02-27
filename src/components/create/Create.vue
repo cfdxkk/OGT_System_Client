@@ -29,7 +29,7 @@ export default {
   components: {
   },
   computed: {
-    createGroupUrl() {return "http://" + this.hostAddress + "/group/create"}
+    createGroupUrl() {return "http://" + this.$store.state.serverAddress + "/group/create"}
   },
   methods: {
     createGroup: function (){

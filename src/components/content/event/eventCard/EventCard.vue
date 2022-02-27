@@ -71,10 +71,7 @@ export default {
 }
 
 .eventCard {
-  --little-gray-white: #F5F5F5FF;
-  --little-blue-white: #8697CEFC;
-  --user-box-bottom-line-blue: #8697CE47;
-  --over-date-gray: #949494FF;
+
 }
 
 .eventCard {

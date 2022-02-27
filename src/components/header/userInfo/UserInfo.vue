@@ -81,17 +81,17 @@ export default {
     }
   },
   computed: {
-    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
-    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
-    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+    registerURL(){ return "http://" + this.$store.state.serverAddress + "/user/register"},
+    loginURL(){ return "http://" + this.$store.state.serverAddress + "/user/login"},
+    selectURL(){ return "http://" + this.$store.state.serverAddress + "/user/info"},
 
-    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
-    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
+    wsURL(){ return "ws://" + this.$store.state.wsServerAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/message/messagefilterandcluster"},
 
-    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+    offlineMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/messagepull/getofflinemessage"},
 
-    getGroupListUrl(){ return "http://" + this.hostAddress + "/group?userId="},
-    checkTokenUrl(){ return "http://" + this.hostAddress + "/user/tokenCheck"}
+    getGroupListUrl(){ return "http://" + this.$store.state.serverAddress + "/group?userId="},
+    checkTokenUrl(){ return "http://" + this.$store.state.serverAddress + "/user/tokenCheck"}
   },
   methods: {
     openSignInPopup: function (){

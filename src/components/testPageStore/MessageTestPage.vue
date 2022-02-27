@@ -75,16 +75,16 @@ export default {
     }
   },
   computed: {
-    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
-    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
-    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+    registerURL(){ return "http://" + this.$store.state.serverAddress + "/user/register"},
+    loginURL(){ return "http://" + this.$store.state.serverAddress + "/user/login"},
+    selectURL(){ return "http://" + this.$store.state.serverAddress + "/user/info"},
 
-    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
-    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
+    wsURL(){ return "ws://" + this.$store.state.wsServerAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/message/messagefilterandcluster"},
 
-    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+    offlineMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/messagepull/getofflinemessage"},
 
-    groupMessageUrl() {return "http://" + this.hostAddress + "/group/message"}
+    groupMessageUrl() {return "http://" + this.$store.state.serverAddress + "/group/message"}
   },
   methods: {
 
@@ -281,7 +281,7 @@ export default {
 
         // 判断表格是否已经存在，若不存在则新建
         if (!this.db.objectStoreNames.contains("ogtMessage")) {
-          // 建立一个对象仓库来存储我们客户的相关信息，我们选择 messages_from 作为键（key path）
+          // 建立一个对象仓库来存储消息，我们选择 messages_from 作为键（key path）
           this.db.createObjectStore("ogtMessage", { keyPath: "messages_from", autoIncrement: true });
         }
       };
@@ -293,10 +293,10 @@ export default {
         // 整理服务器来的离线消息
         let dataArr = [];
         newOfflineMessage.map(mapItem => {
-          if (dataArr.length == 0) {
+          if (dataArr.length === 0) {
             dataArr.push({  [mapItem.messageFrom]: [mapItem] })
           } else {
-            let res = dataArr.some(item=> {//判断相同日期，有就添加到当前项
+            let res = dataArr.some(item=> {//判断相同来源，有就添加到相同来源的项
               if (mapItem.messageFrom === Object.keys(item)[0]) {
                 console.log("same",item)
                 item[Object.keys(item)[0]].push(mapItem)

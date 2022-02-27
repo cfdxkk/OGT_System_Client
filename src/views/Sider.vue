@@ -1,15 +1,15 @@
 <template>
   <div id="leftSider" class="leftSiderBox">
-    <chat-list goto="/search" itemId="search" name="search" ></chat-list>
-    <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :itemId="group.groupId" :name="group.groupName" ></chat-list>
-    <chat-list goto="/create" itemId="create" name="create" ></chat-list>
+    <chat-list goto="/search" itemId="search" name="search" btn-type="system"></chat-list>
+    <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :itemId="group.groupId" :name="group.groupName" btn-type="groups"></chat-list>
+    <chat-list goto="/create" itemId="create" name="create" btn-type="system"></chat-list>
 
 
   </div>
 </template>
 
 <script>
-import chatList from "@/components/leftList/chatListItem";
+import chatList from "@/components/leftList/ChatListItem";
 
 export default {
   name: "leftSider",
@@ -24,18 +24,18 @@ export default {
     }
   },
   computed: {
-    registerURL(){ return "http://" + this.hostAddress + "/user/register"},
-    loginURL(){ return "http://" + this.hostAddress + "/user/login"},
-    selectURL(){ return "http://" + this.hostAddress + "/user/info"},
+    registerURL(){ return "http://" + this.$store.state.serverAddress + "/user/register"},
+    loginURL(){ return "http://" + this.$store.state.serverAddress + "/user/login"},
+    selectURL(){ return "http://" + this.$store.state.serverAddress + "/user/info"},
 
-    wsURL(){ return "ws://" + this.hostAddress + "/websocket/"},
-    sendMessageUrl(){ return "http://" + this.hostAddress + "/message/messagefilterandcluster"},
+    wsURL(){ return "ws://" + this.$store.state.wsServerAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/message/messagefilterandcluster"},
 
-    offlineMessageUrl(){ return "http://" + this.hostAddress + "/messagepull/getofflinemessage"},
+    offlineMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/messagepull/getofflinemessage"},
 
-    getGroupsByNameUrl(){ return "http://" + this.hostAddress + "/group/search?groupName="},
-    joinGroupUrl(){ return "http://" + this.hostAddress + "/group/join"},
-    getGroupListUrl(){ return "http://" + this.hostAddress + "/group?userId="},
+    getGroupsByNameUrl(){ return "http://" + this.$store.state.serverAddress + "/group/search?groupName="},
+    joinGroupUrl(){ return "http://" + this.$store.state.serverAddress + "/group/join"},
+    getGroupListUrl(){ return "http://" + this.$store.state.serverAddress + "/group?userId="},
 
     groupList(){ return this.$store.state.groupList}
 

@@ -47,7 +47,11 @@ export default {
   --event-box-width: 23vw;
   --event-box-min-width: 350px;
   --event-box-max-width: 450px;
-  --event-box-computed-width: clamp(var(--event-box-min-width), var(--event-box-width), var(--event-box-max-width))
+  --event-box-computed-width: clamp(var(--event-box-min-width), var(--event-box-width), var(--event-box-max-width));
+
+  // sent message box
+  --sent-message-box-height: 70px;
+
 }
 /* colors */
 :root {
@@ -73,6 +77,12 @@ export default {
   --good-green: #00bE6E;
   --good-dark-green: #007E4d;
   --good-dark-green-alpha: #00573555;
+
+  --little-gray-white: #F5F5F5FF;
+  --little-blue-white: #8697CEFC;
+  --little-blue-white2: #C5D0FCFC;
+  --user-box-bottom-line-blue: #8697CE47;
+  --over-date-gray: #949494FF;
 }
 /* z-index */
 :root {

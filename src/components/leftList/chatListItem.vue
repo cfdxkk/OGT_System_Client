@@ -20,6 +20,9 @@ export default {
     name: {
       type: String
     },
+    btnType: {
+      type: String
+    },
     itemId: {
       type: String
     },
@@ -41,30 +44,52 @@ export default {
       let chatId = url.split('/').slice(-1)[0]
       if(chatId !== '') {
         if(chatId === this.$props.itemId) {
-          console.log('isActive')
           this.isActive = true
+          if (this.$props.btnType === 'groups') {
+            this.pushActiveGroupMessagesToVuex(this.$props.itemId)
+          }
         } else {
           this.isActive = false
         }
       }
     }
   },
-  // computed: {
-  //   isActive: () => {
-  //     let url = window.location.href | self.location.href | document.URL | document.location
-  //     let chatId = url.toString().split('/')
-  //     if(chatId !== null) {
-  //       if(chatId[1] === this.$props.goto) {
-  //         return true
-  //       }
-  //     }
-  //   }
-  // },
   methods: {
     goChat() {
-      // console.log("go to the: ",this.$props.goto)
+      // 切换路由
       this.$router.push(`${this.$props.goto}`)
+    },
+    checkActive() {
+      let routeAddress = this.$route.path.split('/').slice(-1)[0]
+      if (routeAddress === this.$props.itemId){
+        this.isActive = true
+        if (this.$props.btnType === 'groups') {
+          this.pushActiveGroupMessagesToVuex(this.$props.itemId)
+        }
+      } else {
+        this.isActive = false
+      }
+    },
+    pushActiveGroupMessagesToVuex(groupId){
+      console.log(groupId + '群被激活一次')
+      let _this = this
+      // 把indexedDB中的数据推入vuex的 activeGroupMessage 中
+      this.Dexie.groupMessages.where('groupIdFrom').equals(groupId).toArray().then(groupMessages => {  // 根据groupId获取indexedDB原来的数据
+        if (groupMessages.length === 0) { // 如果indexedDB中没找到用户点击的群的消息，则向vuex的活动消息推空数组
+          _this.$store.commit('updateActiveGroupMessage', [])
+        } else { // 如果indexedDB中找到用户点击的群的消息，则向vuex的活动消息推找到的消息数组
+
+          console.log("offlineMMMMMMMMMMMMMMMMMM", groupMessages[0].messages)
+          if (this.$route.path.split('/').slice(-1)[0] === groupId) {
+            // 加入到vuex活动群组消息中
+            _this.$store.commit('updateActiveGroupMessage', groupMessages[0].messages)
+          }
+        }
+      })
     }
+  },
+  mounted() {
+    this.checkActive()
   }
 }
 </script>

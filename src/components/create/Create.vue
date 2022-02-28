@@ -32,28 +32,42 @@ export default {
     createGroupUrl() {return "http://" + this.$store.state.serverAddress + "/group/create"}
   },
   methods: {
-    createGroup: function (){
-      let createGroupNameInput = document.getElementById('createGroupNameInput')
-      let groupName = createGroupNameInput.value
-      let createGroupIntroductionInput = document.getElementById('createGroupIntroductionInput')
-      let createGroupIntroduction = createGroupIntroductionInput.value
+    createGroup: function () {
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和tokey
+        let cookieArray = (cookie.split('=')[1]).split('-');
+        let userId = cookieArray[1]
+        let token = cookieArray[2]
+
+        let createGroupNameInput = document.getElementById('createGroupNameInput')
+        let groupName = createGroupNameInput.value
+        let createGroupIntroductionInput = document.getElementById('createGroupIntroductionInput')
+        let createGroupIntroduction = createGroupIntroductionInput.value
 
 
+        if (!(groupName === '' || createGroupIntroduction === '')){
+          let groupInfo = {
+            groupName: groupName,
+            groupIntroduction: createGroupIntroduction,
+            groupCreator: userId,
+            token
+          }
 
-      if (!(groupName === '' || createGroupIntroduction === '')){
-        let groupInfo = {
-          groupName: groupName,
-          groupIntroduction: createGroupIntroduction
+          console.log('groupName',groupName)
+          console.log('groupText',createGroupIntroduction)
+          this.Axios.post(this.createGroupUrl, groupInfo).then(groups => {
+
+            if (groups.data.length !== 0 || groups.data !== '' || groups.data !== null) {
+              this.$store.commit('updateGroupList', groups.data.groupList)
+              this.$router.push(`/chat/${groups.data.groupId}`)
+              // console.log(groups.data)
+            }
+          })
         }
 
-        console.log('groupName',groupName)
-        console.log('groupText',createGroupIntroduction)
-        this.Axios.post(this.createGroupUrl, groupInfo).then(data => {
-          console.log('create status: ',data)
-        })
+        console.log('create')
       }
-
-      console.log('create')
     }
   }
 }

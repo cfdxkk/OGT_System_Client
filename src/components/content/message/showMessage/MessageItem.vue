@@ -23,7 +23,7 @@ export default {
 
 .message {
 
-  height: 60px;
+  /*height: 60px;*/
   width: 100%;
 
   margin-top: 5px;
@@ -57,6 +57,8 @@ export default {
 .messageBox {
   width: calc(100% - 60px);
   height: 100%;
+
+  margin-top: 9px;
 
   /*background-color: red;*/
 

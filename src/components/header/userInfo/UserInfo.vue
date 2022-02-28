@@ -5,7 +5,9 @@
 
     <div class="userInfo" v-if="logged">
       <div class="userNameBox">
-        {{this.username}}
+        <div class="userNameEllipsisBox">
+          {{this.username}}
+        </div>
       </div>
     </div>
 
@@ -331,13 +333,28 @@ export default {
   position: absolute;
   right: 20px;
   height: 100%;
+  width: 150px;
 }
 
 .userNameBox {
   height: 100%;
+  width: 100%;
 
   display: grid;
   align-items: center;
+  justify-items: end;
+}
+
+.userNameEllipsisBox {
+  width: 100%;
+
+  text-align: right;
+
+  text-overflow:ellipsis; /* 文字超出长度会被截取并添加... */
+  white-space: nowrap;
+  overflow: hidden;
+
+  display: block;
 }
 
 

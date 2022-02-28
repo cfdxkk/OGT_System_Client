@@ -7,7 +7,7 @@
     </div>
     <div id="searchPart" class="searchPartBox">
       <div id="searchBar" class="searchBarBox">
-        <input type="text" id="searchInputBox" class="searchInputBox" @focus="inputBoxOn" @blur="inputBoxOut" @keyup.enter="searchGrooupByName">
+        <input type="text" id="searchInputBox" class="searchInputBox" @focus="inputBoxOn" @blur="inputBoxOut" @keyup.enter="searchGroupByName">
       </div>
     </div>
 
@@ -79,7 +79,7 @@ export default {
         inputBox.style.boxShadow = ''
       }
     },
-    searchGrooupByName: function (){
+    searchGroupByName: function (){
       // console.log('search!')
       let groupName = document.getElementById('searchInputBox').value
       this.Axios.get(this.getGroupsByNameUrl + groupName).then(groups => {
@@ -101,7 +101,7 @@ export default {
         }
         this.Axios.post(this.joinGroupUrl, groupRelationship).then(groups => {
           if (groups.data.length !== 0 || groups.data !== '' || groups.data !== null) {
-            this.$store.commit('updateGroupList', groups.data)
+            this.$store.commit('updateGroupList', groups.data.groupList)
             this.$router.push(`/chat/${groupId}`)
             // console.log(groups.data)
           }

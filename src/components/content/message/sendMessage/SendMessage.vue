@@ -1,8 +1,8 @@
 <template>
   <div id="sentMessageBox" class="sentMessageBox">
     <div id="sentMessageInputBox" class="sentMessageInputBox">
-      <input id="sentMessageInput" type="text" class="sentMessageInput">
-      <div id="sentMessageSentButton" class="sentMessageSentButton" @click="sentMessage">发送</div>
+      <input id="sentMessageInput" type="text" class="sentMessageInput" @keyup.enter="sentMessage">
+      <div id="sentMessageSentButton" class="sentMessageSentButton" @click="sentMessage" >发送</div>
     </div>
   </div>
 </template>
@@ -135,6 +135,9 @@ export default {
         this.Axios.post(this.groupMessageUrl, message).then( result => {
           console.log(result.data);
           if (result.data === true){  // 如果消息发送成功
+
+            document.getElementById('sentMessageInput').value = '' //消息发送成功，清空input框
+
             // 加入到自己的indexeddb中
             _this.Dexie.groupMessages.where('groupIdFrom').equals(groupId).toArray().then(groupMessages => {  // 根据groupId获取indexedDB原来的数据
               if (groupMessages.length === 0){  // 如果 indexedDB 里没有这个群组的消息数据, 插入刚发送的消息

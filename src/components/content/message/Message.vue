@@ -72,6 +72,8 @@ export default {
                 if (this.$route.path.split('/').slice(-1)[0] === groupId) {
                   // 加入到vuex活动群组消息中
                   this.$store.commit('updateActiveGroupMessage', messagesFromGroups[groupId])
+                  // 插入到vuex活动群聊事件中
+                  // this.$store.commit('updateActiveGroupEvent', messagesFromGroups[groupId].filter( groupEvent => groupEvent.messageType === '2'))
                 }
               } else { // 如果indexedDB里有这个群组的历史数据，把获取到的新消息拼接到原来的消息尾部，然后再插入(一个群聊最多50条)
                 let newOfflineMessages = groupMessages[0].messages.concat(messagesFromGroups[groupId]).slice(-50)
@@ -82,6 +84,8 @@ export default {
                 if (this.$route.path.split('/').slice(-1)[0] === groupId) {
                   // 加入到vuex活动群组消息中
                   this.$store.commit('updateActiveGroupMessage', newOfflineMessages)
+                  // 插入到vuex活动群聊事件中
+                  // this.$store.commit('updateActiveGroupEvent', newOfflineMessages.filter( groupEvent => groupEvent.messageType === '2'))
                 }
               }
             })

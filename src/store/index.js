@@ -2,13 +2,16 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    // wsServerAddress: "localhost:8888",
-    // serverAddress: "localhost:8888",
-    wsServerAddress: "150.158.98.146:8888",
-    serverAddress: "150.158.98.146:8888",
+    wsServerAddress: "localhost:8888",
+    serverAddress: "localhost:8888",
+    // wsServerAddress: "150.158.98.146:8888",
+    // serverAddress: "150.158.98.146:8888",
+
+
     groupList: [],
     offlineMessage: {},
     activeGroupMessage: [],
+    activeGroupEvent: [],
   },
   mutations: {
     updateGroupList (state, payload){
@@ -38,6 +41,9 @@ export default createStore({
     },
     updateActiveGroupMessage(state, payload) {
       state.activeGroupMessage = payload
+    },
+    updateActiveGroupEvent (state, payload) {
+      state.activeGroupEvent = payload
     }
   },
   actions: {

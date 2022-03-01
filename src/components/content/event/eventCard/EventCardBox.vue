@@ -53,6 +53,18 @@ export default {
   props: {
     events: Array
   },
+  computed: {
+    registerURL(){ return "http://" + this.$store.state.serverAddress + "/user/register"},
+    loginURL(){ return "http://" + this.$store.state.serverAddress + "/user/login"},
+    selectURL(){ return "http://" + this.$store.state.serverAddress + "/user/info"},
+
+    wsURL(){ return "ws://" + this.$store.state.wsServerAddress + "/websocket/"},
+    sendMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/message/messagefilterandcluster"},
+
+    offlineMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/messagepull/getofflinemessage"},
+
+    groupMessageUrl() {return "http://" + this.$store.state.serverAddress + "/group/message"}
+  },
   components: {
     eventCard
   },
@@ -449,8 +461,107 @@ export default {
       }
     },
     postEvent: function (){
-      console.log('eventPosted')
-      this.openAndCloseAddForm()
+
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和token
+        let cookieArray = (cookie.split('=')[1]).split('-');
+        let username = cookieArray[0]
+        let userId = cookieArray[1]
+        let token = cookieArray[2]
+
+        // 获取输入的信息文本
+        let startDate = document.getElementById('startDatePicker').value.replace(/-/g, "/")
+        let startTime = document.getElementById('startTimePicker').value
+        let startDateTimestamp = new Date(startDate + " " + startTime).getTime().toString()
+
+        let endDate = document.getElementById('endDatePicker').value.replace(/-/g, "/")
+        let endTime = document.getElementById('endTimePicker').value
+        let endDateTimestamp = new Date(endDate + " " + endTime).getTime().toString()
+
+        let eventTitle = document.getElementById('eventTitleInput').value
+        let eventText = document.getElementById('eventTextInput').value
+
+        // c10y is means -> constituency
+        let eventString = startDateTimestamp + " >c10y_:< " + endDateTimestamp + " >c10y_:< " + eventTitle + " >c10y_:< " + eventText
+
+
+
+
+        // 从路由中获取群聊ID
+        let groupId = this.$route.path.split('/').slice(-1)[0]
+        // 组装eventMessage
+        let message = {
+          groupIdFrom: groupId,
+          uuidFrom: userId,
+          usernameFrom: username,
+          token: token,
+          messageType: '2',
+          message: eventString,
+        }
+
+        let messagePrivate = {
+          selfMessage: true,
+          messageNoInGroup: 0,
+          groupIdFrom: groupId,
+          uuidFrom: userId,
+          usernameFrom: username,
+          messageType: '2',
+          message: eventString,
+
+        }
+
+        console.log('tttttttttttttttttttttttttttttest',messagePrivate);
+        let _this = this
+        this.Axios.post(this.groupMessageUrl, message).then( result => {
+          console.log(result.data);
+          if (result.data === true){  // 如果消息发送成功
+
+            document.getElementById('sentMessageInput').value = '' //消息发送成功，清空input框
+
+            // 加入到自己的indexeddb中
+            _this.Dexie.groupMessages.where('groupIdFrom').equals(groupId).toArray().then(groupMessages => {  // 根据groupId获取indexedDB原来的数据
+              if (groupMessages.length === 0){  // 如果 indexedDB 里没有这个群组的消息数据, 插入刚发送的消息
+                // 插入到indexedDB中
+                _this.Dexie.groupMessages.put({
+                  'groupIdFrom': groupId,
+                  'messages': [messagePrivate]
+                })
+                // 加入到vuex活动群组消息中
+                _this.$store.commit('updateActiveGroupMessage', [messagePrivate])
+                // 插入到vuex活动群聊事件中
+                let newOfflineEvent = _this.$store.state.activeGroupEvent.concat([messagePrivate])
+                _this.$store.commit('updateActiveGroupEvent', newOfflineEvent)
+              } else { // 如果indexedDB里有这个群组的历史数据，把刚发送的新消息拼接到原来的消息尾部，然后再插入(一个群聊最多50条)
+
+                // 计算出正确的消息顺序号
+                messagePrivate.messageNoInGroup = parseInt(groupMessages[0].messages.slice(-1)[0].messageNoInGroup) + 1 + ''
+                // 把发送的这条消息与 indexedDB 里之前的消息组合并截取后50个
+                let newOfflineMessages = groupMessages[0].messages.concat([messagePrivate]).slice(-50)
+
+                // 插入到indexedDB中
+                _this.Dexie.groupMessages.put({
+                  'groupIdFrom': groupId,
+                  'messages': newOfflineMessages
+                })
+                // 加入到vuex活动群组消息中
+                _this.$store.commit('updateActiveGroupMessage', newOfflineMessages)
+
+                // 把发送的这条事件与 vuex 里之前的消息组合并截取后50个
+                let newOfflineEvent = _this.$store.state.activeGroupEvent.concat([messagePrivate])
+                // 插入到vuex活动群聊事件中
+                _this.$store.commit('updateActiveGroupEvent', newOfflineEvent)
+              }
+            })
+
+
+          }
+
+          // 关闭新增事件的窗口
+          this.openAndCloseAddForm()
+
+        })
+      }
     }
   }
 }

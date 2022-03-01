@@ -239,6 +239,11 @@ export default {
                   if (this.$route.path.split('/').slice(-1)[0] === groupIdFrom) {
                     // 加入到vuex活动群组消息中
                     this.$store.commit('updateActiveGroupMessage', [messagePrivate])
+
+                    if(messagePrivate.messageType === '2') {  // 如果消息类型是2
+                      // 加入到vuex活动群组事件中
+                      this.$store.commit('updateActiveGroupEvent', [messagePrivate])
+                    }
                   }
                 } else { // 如果indexedDB里有这个群组的历史数据，把刚发送的新消息拼接到原来的消息尾部，然后再插入(一个群聊最多50条)
 
@@ -254,9 +259,10 @@ export default {
 
                   // 如果是当前活跃的群聊
                   if (this.$route.path.split('/').slice(-1)[0] === groupIdFrom) {
-                    console.log('-----------------------------------------------active')
                     // 加入到vuex活动群组消息中
                     this.$store.commit('updateActiveGroupMessage', newOfflineMessages)
+                    // 加入到vuex活动群组事件中
+                    this.$store.commit('updateActiveGroupEvent', newOfflineMessages.filter( groupEvent => groupEvent.messageType === '2'))
                   }
                 }
               })

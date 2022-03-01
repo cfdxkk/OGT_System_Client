@@ -101,7 +101,7 @@ export default {
         }
         this.Axios.post(this.joinGroupUrl, groupRelationship).then(groups => {
           if (groups.data.length !== 0 || groups.data !== '' || groups.data !== null) {
-            this.$store.commit('updateGroupList', groups.data.groupList)
+            this.$store.commit('updateGroupList', groups.data)
             this.$router.push(`/chat/${groupId}`)
             // console.log(groups.data)
           }

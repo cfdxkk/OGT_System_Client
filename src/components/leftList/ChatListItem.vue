@@ -83,9 +83,15 @@ export default {
           if (this.$route.path.split('/').slice(-1)[0] === groupId) {
             // 加入到vuex活动群组消息中
             _this.$store.commit('updateActiveGroupMessage', groupMessages[0].messages)
+            // 插入到vuex活动群聊事件中
+            // _this.$store.commit('updateActiveGroupEvent', groupMessages[0].messages.filter( groupEvent => groupEvent.messageType === '2'))
           }
         }
       })
+
+      // 从数据库获取事件然后把获取到的事件放入vuex中
+
+
     }
   },
   mounted() {

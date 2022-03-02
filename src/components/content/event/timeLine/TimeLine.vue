@@ -39,11 +39,14 @@
 
 <script>
 export default {
-
-
   name: "TimeLine",
   props: {
     events: Array
+  },
+  watch: {
+    events(){
+      this.showEvent()
+    }
   },
   methods: {
 
@@ -70,6 +73,9 @@ export default {
       setInterval(showNowTileLine,1000)
     },
     showEvent: function (){
+
+      console.log("showwwwwwwww", this.$props.events.length)
+
       let eventLineBox = document.getElementById('eventLine')
       // let eventLineBoxHeight = eventLineBox.offsetHeight
 

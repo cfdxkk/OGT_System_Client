@@ -180,7 +180,7 @@ export default {
 
         let cookie = document.cookie
         if (cookie !== '') {
-          // 从cookie中获取uuid和tokey
+          // 从cookie中获取uuid和token
           let cookieArray = (cookie.split('=')[1]).split('-');
           let wsUsername = cookieArray[0]
           let wsUUID = cookieArray[1]
@@ -239,11 +239,6 @@ export default {
                   if (this.$route.path.split('/').slice(-1)[0] === groupIdFrom) {
                     // 加入到vuex活动群组消息中
                     this.$store.commit('updateActiveGroupMessage', [messagePrivate])
-
-                    if(messagePrivate.messageType === '2') {  // 如果消息类型是2
-                      // 加入到vuex活动群组事件中
-                      this.$store.commit('updateActiveGroupEvent', [messagePrivate])
-                    }
                   }
                 } else { // 如果indexedDB里有这个群组的历史数据，把刚发送的新消息拼接到原来的消息尾部，然后再插入(一个群聊最多50条)
 
@@ -261,11 +256,34 @@ export default {
                   if (this.$route.path.split('/').slice(-1)[0] === groupIdFrom) {
                     // 加入到vuex活动群组消息中
                     this.$store.commit('updateActiveGroupMessage', newOfflineMessages)
-                    // 加入到vuex活动群组事件中
-                    this.$store.commit('updateActiveGroupEvent', newOfflineMessages.filter( groupEvent => groupEvent.messageType === '2'))
                   }
                 }
               })
+
+              if(messagePrivate.messageType === '2') {  // 如果消息类型是2
+
+                let eventArray = messagePrivate.message.split(' >c10y_:< ')
+
+                // 插入到vuex活动群聊事件中
+                let groupEvent = {
+                  endTime: parseInt(eventArray[1]),
+                  eventColor: eventArray[4],
+                  eventId: 0,
+                  eventImg: [],
+                  eventText: eventArray[3],
+                  eventTitle: eventArray[2],
+                  startTime: parseInt(eventArray[0]),
+                  userAvatar: "",
+                  userName: messagePrivate.usernameFrom,
+                  userType: 0,
+                }
+
+
+                // 把发送的这条事件与 vuex 里之前的消息组合并
+                let newOfflineEvent = this.$store.state.activeGroupEvent.concat([groupEvent])
+                // 加入到vuex活动群组事件中
+                this.$store.commit('updateActiveGroupEvent', newOfflineEvent)
+              }
             }
           }
           //连接关闭的回调方法

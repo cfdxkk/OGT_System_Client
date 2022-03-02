@@ -1,5 +1,5 @@
 <template>
-  <div class="message">
+  <div class="message" v-if="this.$props.message.messageType !== '2'">
     <div class="messageUserAvatar">
       <div class="messageUserAvatarBox"></div>
     </div>

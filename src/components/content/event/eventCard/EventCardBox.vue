@@ -482,8 +482,11 @@ export default {
         let eventTitle = document.getElementById('eventTitleInput').value
         let eventText = document.getElementById('eventTextInput').value
 
+        let eventColor = this.color16()
+
+
         // c10y is means -> constituency
-        let eventString = startDateTimestamp + " >c10y_:< " + endDateTimestamp + " >c10y_:< " + eventTitle + " >c10y_:< " + eventText
+        let eventString = startDateTimestamp + " >c10y_:< " + endDateTimestamp + " >c10y_:< " + eventTitle + " >c10y_:< " + eventText + " >c10y_:< " + eventColor
 
 
 
@@ -529,8 +532,22 @@ export default {
                 })
                 // 加入到vuex活动群组消息中
                 _this.$store.commit('updateActiveGroupMessage', [messagePrivate])
+
                 // 插入到vuex活动群聊事件中
-                let newOfflineEvent = _this.$store.state.activeGroupEvent.concat([messagePrivate])
+                let groupEvent = {
+                  endTime: parseInt(endDateTimestamp),
+                  eventColor: eventColor,
+                  eventId: 0,
+                  eventImg: [],
+                  eventText: eventText,
+                  eventTitle: eventTitle,
+                  startTime: parseInt(startDateTimestamp),
+                  userAvatar: "",
+                  userName: username,
+                  userType: 0,
+                }
+                // 把发送的这条事件与 vuex 里之前的消息组合并
+                let newOfflineEvent = _this.$store.state.activeGroupEvent.concat([groupEvent])
                 _this.$store.commit('updateActiveGroupEvent', newOfflineEvent)
               } else { // 如果indexedDB里有这个群组的历史数据，把刚发送的新消息拼接到原来的消息尾部，然后再插入(一个群聊最多50条)
 
@@ -547,8 +564,22 @@ export default {
                 // 加入到vuex活动群组消息中
                 _this.$store.commit('updateActiveGroupMessage', newOfflineMessages)
 
-                // 把发送的这条事件与 vuex 里之前的消息组合并截取后50个
-                let newOfflineEvent = _this.$store.state.activeGroupEvent.concat([messagePrivate])
+                // 插入到vuex活动群聊事件中
+                let groupEvent = {
+                  endTime: parseInt(endDateTimestamp),
+                  eventColor: eventColor,
+                  eventId: 0,
+                  eventImg: [],
+                  eventText: eventText,
+                  eventTitle: eventTitle,
+                  startTime: parseInt(startDateTimestamp),
+                  userAvatar: "",
+                  userName: username,
+                  userType: 0,
+                }
+
+                // 把发送的这条事件与 vuex 里之前的消息组合并
+                let newOfflineEvent = _this.$store.state.activeGroupEvent.concat([groupEvent])
                 // 插入到vuex活动群聊事件中
                 _this.$store.commit('updateActiveGroupEvent', newOfflineEvent)
               }
@@ -562,6 +593,12 @@ export default {
 
         })
       }
+    },
+    color16(){//十六进制颜色随机
+      let r = Math.floor(Math.random()*256);
+      let g = Math.floor(Math.random()*256);
+      let b = Math.floor(Math.random()*256);
+      return '#'+(Array(6).join(0) + (r.toString(16)+g.toString(16)+b.toString(16))).slice(-6)
     }
   }
 }

@@ -91,7 +91,7 @@ export default {
 
       let cookie = document.cookie
       if (cookie !== '') {
-        // 从cookie中获取uuid和tokey
+        // 从cookie中获取uuid和token
         let cookieArray = (cookie.split('=')[1]).split('-');
         let UUID = cookieArray[1]
 

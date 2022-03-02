@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 export default {
   name: "chatListItem",
   props: {
@@ -37,6 +38,9 @@ export default {
     return {
       isActive: false
     }
+  },
+  computed: {
+    groupEventUrl() {return "http://" + this.$store.state.serverAddress + "/group/event"}
   },
   watch:{
     $route(to){
@@ -89,7 +93,27 @@ export default {
         }
       })
 
+
+
+
       // 从数据库获取事件然后把获取到的事件放入vuex中
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和token
+        let cookieArray = (cookie.split('=')[1]).split('-');
+        let userId = cookieArray[1]
+        let token = cookieArray[2]
+
+        let eventGetter = {
+          groupId,
+          userId,
+          token
+        }
+
+        this.Axios.post(this.groupEventUrl, eventGetter).then( groupEvents => {
+          _this.$store.commit('updateActiveGroupEvent', groupEvents.data)
+        } )
+      }
 
 
     }

@@ -1,7 +1,7 @@
 <template>
   <div id="searchPage" class="searchPageBox">
     <search-bar />
-    <hot-channel style="display: none" />
+    <hot-channel style="" />
   </div>
 </template>
 

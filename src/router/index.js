@@ -52,9 +52,18 @@ const routes = [
     path: '/create',
     name: 'Create',
     components: {
-      default: () => import("@/components/search/Search"),
+      default: () => import("@/components/create/Create"),
       header: () => import("@/components/header/Header"),
       content: () => import("@/components/create/Create")
+    }
+  },
+  {
+    path: '/user/:userid',
+    name: 'userPage',
+    components: {
+      default: () => import("@/components/user/UserPage"),
+      header: () => import("@/components/header/Header"),
+      content: () => import("@/components/user/UserPage"),
     }
   },
   {

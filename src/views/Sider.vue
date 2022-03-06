@@ -1,8 +1,8 @@
 <template>
   <div id="leftSider" class="leftSiderBox">
-    <chat-list goto="/search" itemId="search" name="search" btn-type="system"></chat-list>
+    <chat-list goto="/search" itemId="search" name="搜索" btn-type="system"></chat-list>
     <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :itemId="group.groupId" :name="group.groupName" btn-type="groups"></chat-list>
-    <chat-list goto="/create" itemId="create" name="create" btn-type="system"></chat-list>
+    <chat-list goto="/create" itemId="create" name="创建" btn-type="system"></chat-list>
 
 
   </div>
@@ -48,7 +48,13 @@ export default {
       let cookie = document.cookie
       if (cookie !== '') {
         // 从cookie中获取uuid和token
-        let cookieArray = (cookie.split('=')[1]).split('-');
+        let trueCookie = ''
+        cookie.split('; ').forEach(ogtCookie => {
+          if (ogtCookie.indexOf('userinfo=') !== -1){
+            trueCookie = ogtCookie
+          }
+        })
+        let cookieArray = (trueCookie.split('=')[1]).split('-');
         let userId = cookieArray[1]
 
         this.Axios.get(this.getGroupListUrl + userId).then(groups => {

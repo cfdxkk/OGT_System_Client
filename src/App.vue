@@ -70,6 +70,7 @@ export default {
 
   --search-bar: #2E4E7EFF;
 
+  --danger-pink: #D9106bFF;
   --danger-red: #960043FF;
   --danger-dark-red: #6E001DFF;
   --danger-dark-red-alpha: #6E001D55;

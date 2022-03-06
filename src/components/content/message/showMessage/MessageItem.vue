@@ -1,7 +1,7 @@
 <template>
   <div class="message" v-if="this.$props.message.messageType !== '2'">
     <div class="messageUserAvatar">
-      <div class="messageUserAvatarBox"></div>
+      <div class="messageUserAvatarBox" @click="gotoUserPage(this.$props.message.uuidFrom)"></div>
     </div>
     <div class="messageBox">
       <div class="messageUserInfo">{{this.$props.message.usernameFrom}}</div>
@@ -15,6 +15,11 @@ export default {
   name: "MessageItem",
   props: {
     message: Object
+  },
+  methods: {
+    gotoUserPage(userId) {
+      this.$router.push(`/user/${userId}`)
+    }
   }
 }
 </script>
@@ -50,6 +55,8 @@ export default {
   height: 70%;
 
   clip-path: circle(50%);
+
+  cursor: pointer;
 
   background-color: white;
 }

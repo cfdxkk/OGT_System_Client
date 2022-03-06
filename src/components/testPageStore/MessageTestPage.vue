@@ -450,7 +450,13 @@ export default {
       let cookie = document.cookie
       if (cookie !== '') {
         // 从cookie中获取uuid和token
-        let cookieArray = (cookie.split('=')[1]).split('-');
+        let trueCookie = ''
+        cookie.split('; ').forEach(ogtCookie => {
+          if (ogtCookie.indexOf('userinfo=') !== -1){
+            trueCookie = ogtCookie
+          }
+        })
+        let cookieArray = (trueCookie.split('=')[1]).split('-');
         let userId = cookieArray[1]
         let token = cookieArray[2]
         let message = {

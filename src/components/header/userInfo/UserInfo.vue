@@ -5,7 +5,7 @@
 
     <div class="userInfo" v-if="logged">
       <div class="userNameBox">
-        <div class="userNameEllipsisBox">
+        <div class="userNameEllipsisBox" @click="goToUserInfoPage()">
           {{this.username}}
         </div>
       </div>
@@ -121,6 +121,7 @@ export default {
 
       this.Axios.post(this.loginURL,loginData).then(data => {
         this.username = username
+        this.userId = data.data.split('-')[0]
         let cookieStr = "userinfo="+username+"-"+data.data+"; expires=Thu, 18 Dec 2043 12:00:00 GMT"
         document.cookie = cookieStr
         this.signInVisible = false
@@ -149,7 +150,13 @@ export default {
       let cookie = document.cookie
       if (cookie !== ''){
         // 从cookie中获取uuid和token
-        let cookieArray = (cookie.split('=')[1]).split('-');
+        let trueCookie = ''
+        cookie.split('; ').forEach(ogtCookie => {
+          if (ogtCookie.indexOf('userinfo=') !== -1){
+            trueCookie = ogtCookie
+          }
+        })
+        let cookieArray = (trueCookie.split('=')[1]).split('-');
         let username = cookieArray[0]
         let UUID = cookieArray[1]
         let token = cookieArray[2]
@@ -181,7 +188,13 @@ export default {
         let cookie = document.cookie
         if (cookie !== '') {
           // 从cookie中获取uuid和token
-          let cookieArray = (cookie.split('=')[1]).split('-');
+          let trueCookie = ''
+          cookie.split('; ').forEach(ogtCookie => {
+            if (ogtCookie.indexOf('userinfo=') !== -1){
+              trueCookie = ogtCookie
+            }
+          })
+          let cookieArray = (trueCookie.split('=')[1]).split('-');
           let wsUsername = cookieArray[0]
           let wsUUID = cookieArray[1]
           let wsToken = cookieArray[2]
@@ -298,6 +311,25 @@ export default {
       else{
         alert('Not support websocket')
       }
+    },
+    goToUserInfoPage() {
+
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和token
+        let trueCookie = ''
+        cookie.split('; ').forEach(ogtCookie => {
+          if (ogtCookie.indexOf('userinfo=') !== -1) {
+            trueCookie = ogtCookie
+          }
+        })
+        let cookieArray = (trueCookie.split('=')[1]).split('-');
+        let userId = cookieArray[1]
+
+
+        this.$router.push(`/user/${userId}`)
+      }
+
     }
 
   },
@@ -377,6 +409,8 @@ export default {
   text-overflow:ellipsis; /* 文字超出长度会被截取并添加... */
   white-space: nowrap;
   overflow: hidden;
+
+  cursor: pointer;
 
   display: block;
 }

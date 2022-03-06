@@ -67,6 +67,14 @@ const routes = [
     }
   },
   {
+    path: '/groupInfo/:groupId',
+    name: 'groupInfo',
+    components: {
+      header: () => import("@/components/header/Header"),
+      content: () => import("@/components/content/groupInfo/GroupInfo")
+    }
+  },
+  {
     path: '/testpage',
     name: 'TestPage',
     components: {

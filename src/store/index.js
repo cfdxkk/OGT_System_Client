@@ -7,6 +7,8 @@ export default createStore({
     // wsServerAddress: "150.158.98.146:8888",
     // serverAddress: "150.158.98.146:8888",
 
+    activeTitleName: '搜索',
+
 
     groupList: [],
     offlineMessage: {},
@@ -44,6 +46,9 @@ export default createStore({
     },
     updateActiveGroupEvent (state, payload) {
       state.activeGroupEvent = payload
+    },
+    updateActiveTitleName (state, payload){
+      state.activeTitleName = payload
     }
   },
   actions: {

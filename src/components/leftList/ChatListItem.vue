@@ -48,6 +48,7 @@ export default {
       let chatId = url.split('/').slice(-1)[0]
       if(chatId !== '') {
         if(chatId === this.$props.itemId) {
+          this.$store.commit('updateActiveTitleName', this.$props.name)  //将当前侧栏item名提交到vuex里的[活动]标题中
           this.isActive = true
           if (this.$props.btnType === 'groups') {
             this.pushActiveGroupMessagesToVuex(this.$props.itemId)
@@ -66,6 +67,7 @@ export default {
     checkActive() {
       let routeAddress = this.$route.path.split('/').slice(-1)[0]
       if (routeAddress === this.$props.itemId){
+        this.$store.commit('updateActiveTitleName', this.$props.name)
         this.isActive = true
         if (this.$props.btnType === 'groups') {
           this.pushActiveGroupMessagesToVuex(this.$props.itemId)

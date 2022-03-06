@@ -111,6 +111,9 @@ export default {
 
     //登录，能往cookie里存储token
     login(){
+
+      this.clearCookie()
+
       let username = document.getElementById('userNameSignInInput').value
       let password = document.getElementById('passwordSignInInput').value
 
@@ -122,11 +125,13 @@ export default {
       this.Axios.post(this.loginURL,loginData).then(data => {
         this.username = username
         this.userId = data.data.split('-')[0]
-        let cookieStr = "userinfo="+username+"-"+data.data+"; expires=Thu, 18 Dec 2043 12:00:00 GMT"
-        document.cookie = cookieStr
-        this.signInVisible = false
-        this.logged = true
-        this.checkLoginStatus()
+        if(data.data !== 'error password or unregister user'){
+          let cookieStr = "userinfo="+username+"-"+data.data+"; expires=Thu, 18 Dec 2043 12:00:00 GMT"
+          document.cookie = cookieStr
+          this.signInVisible = false
+          this.logged = true
+          this.checkLoginStatus()
+        }
       })
     },
     //注册
@@ -330,6 +335,14 @@ export default {
         this.$router.push(`/user/${userId}`)
       }
 
+    },
+    clearCookie() {
+      // 清除cookie
+      let keys = document.cookie.match(/[^ =;]+(?==)/g);
+      if(keys) {
+        for(let i = keys.length; i--;)
+          document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()+";path=/"
+      }
     }
 
   },

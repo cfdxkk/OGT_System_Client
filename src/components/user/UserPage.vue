@@ -303,8 +303,9 @@ export default {
 
 }
 .hotChannelBox {
-  width: 980px;
+  /*width: 980px;*/
   /*height: 800px;*/
+  max-width: 1000px;
 
   background-color: #38447a;
 
@@ -318,7 +319,7 @@ export default {
   background-color: #2e4b75;
 }
 .channelsBox {
-  width: 95%;
+  /*width: 95%;*/
 
   display: flex;
   flex-wrap: wrap;
@@ -335,7 +336,7 @@ export default {
   background-color: #6a91cb;
 
   border-radius: 10px 10px;
-  margin: 10px;
+  margin: 20px;
 
   display: flex;
   justify-content: center;

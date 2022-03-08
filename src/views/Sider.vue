@@ -80,6 +80,7 @@ export default {
   left: var(--zero);
 
   overflow-y: auto;
+  overflow-x: hidden;
 
   background-color: var(--sider-blue);
 

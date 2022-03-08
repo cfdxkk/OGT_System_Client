@@ -68,6 +68,8 @@ export default {
 
   --event-blue: #172554FF;
 
+  --group-user-item-blue: #083164;
+
   --search-bar: #2E4E7EFF;
 
   --danger-pink: #D9106bFF;
@@ -78,6 +80,8 @@ export default {
   --good-green: #00bE6E;
   --good-dark-green: #007E4d;
   --good-dark-green-alpha: #00573555;
+
+  --good-orange: orange;
 
   --little-gray-white: #F5F5F5FF;
   --little-blue-white: #8697CEFC;

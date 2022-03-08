@@ -4,7 +4,7 @@
       <div class="messageUserAvatarBox" @click="gotoUserPage(this.$props.message.uuidFrom)"></div>
     </div>
     <div class="messageBox">
-      <div class="messageUserInfo">{{this.$props.message.usernameFrom}}</div>
+      <div class="messageUserInfo" @click="gotoUserPage(this.$props.message.uuidFrom)">{{this.$props.message.usernameFrom}}</div>
       <div class="messageMessage">{{this.$props.message.message}}</div>
     </div>
   </div>
@@ -77,6 +77,7 @@ export default {
 .messageUserInfo {
   font-size: 14px;
   color: var(--little-blue-white2);
+  cursor: pointer;
 }
 
 .messageMessage {

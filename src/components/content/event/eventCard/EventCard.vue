@@ -79,7 +79,9 @@ export default {
   /*height: 340px;*/
   margin-top: var(--event-card-margin-top);
   background-color: var(--event-blue);
-  border-radius: var(--event-card-border-radius)
+  border-radius: var(--event-card-border-radius);
+
+  overflow-x: hidden;
 }
 
 .userBox {
@@ -234,7 +236,7 @@ export default {
 }
 .eventTitle {
 
-  width: 300px;
+  width: 100%;
 
   overflow: hidden;
   text-overflow: ellipsis;
@@ -247,7 +249,10 @@ export default {
 }
 .eventText {
 
-  /*width: 300px;*/
+  width: 100%;
+
+  word-wrap: break-word;
+  word-break: normal;
 
   margin-top: 4px;
   color: var(--little-blue-white);

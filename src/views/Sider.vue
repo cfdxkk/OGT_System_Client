@@ -1,7 +1,7 @@
 <template>
   <div id="leftSider" class="leftSiderBox">
     <chat-list goto="/search" itemId="search" name="搜索" btn-type="system"></chat-list>
-    <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :itemId="group.groupId" :name="group.groupName" btn-type="groups"></chat-list>
+    <chat-list v-for="group in groupList" :key="group" :goto="'/chat/' + group.groupId" :itemId="group.groupId" :name="group.groupName" :group-avatar="group.groupAvatar" :group-avatar-origin="group.groupAvatarOrigin" btn-type="groups"></chat-list>
     <chat-list goto="/create" itemId="create" name="创建" btn-type="system"></chat-list>
 
 

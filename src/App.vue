@@ -57,6 +57,7 @@ export default {
 :root {
   --white: #FFFFFFFF;
   --black: #000000FF;
+  --alpha: #00000000;
 
   --sider-blue: #0C132BFF;
   //--sider-blue: #ffffff;
@@ -71,6 +72,9 @@ export default {
   --group-user-item-blue: #083164;
 
   --search-bar: #2E4E7EFF;
+
+  --add-image-model-click-area-hover-blue: #395D8DFF;
+  --add-image-model-image-clip-shadow: #0C163999;
 
   --danger-pink: #D9106bFF;
   --danger-red: #960043FF;

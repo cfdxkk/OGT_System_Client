@@ -3,10 +3,10 @@
     <div id="chatListIconTopRoundedCorners" class=" chatListIconRoundedCornersBox" :class="{chatListIconTopRoundedCornersBox: isActive}" >
       <div id="chatListIconBottomRoundedCorners" class=" chatListIconRoundedCornersBox" :class="{chatListIconBottomRoundedCornersBox: isActive}">
         <div class="chatListIconImgBox">
-          <div class="fakeImage">
+          <div v-if="this.$props.groupAvatar === null || this.$props.groupAvatar === '' || this.$props.groupAvatar === undefined" class="avatarBox">
             {{this.$props.name}}
-<!--            <img :src="img" :alt="name">-->
           </div>
+          <img v-if="this.$props.groupAvatar !== null && this.$props.groupAvatar !== '' && this.$props.groupAvatar !== undefined" class="avatarBox"  :src="this.$props.groupAvatar" :alt="this.$props.name">
         </div>
       </div>
     </div>
@@ -31,6 +31,12 @@ export default {
       type: String
     },
     goto: {
+      type: String
+    },
+    groupAvatar: {
+      type: String
+    },
+    groupAvatarOrigin: {
       type: String
     }
   },
@@ -241,7 +247,7 @@ export default {
   pointer-events: none;
 }
 
-.fakeImage {
+.avatarBox {
   width: calc(var(--left-sider-computed-width-small) - var(--image-padding));
   height: calc(var(--left-sider-computed-width-small) - var(--image-padding));
   border-radius: 100%;

@@ -8,9 +8,7 @@ export default createStore({
     // serverAddress: "150.158.98.146:8888",
 
     activeTitleName: '搜索',  // OGT的标题
-
-
-
+    userInfo: {}, // 当前登录的用户信息
     groupList: [],  // 群列表
     offlineMessage: {},   // 离线消息
     activeGroupMessage: [],  // 当前活动群聊中的消息
@@ -19,8 +17,13 @@ export default createStore({
     activeGroupNumbersInfo: [],  // 当前活动的群聊中的成员信息
     activeGroupIdentity: 0,  // 是否拥有对当前活跃群聊的管理权限
     activeGroupInfo: {}, //当前活跃的群聊信息
+
+
   },
   mutations: {
+    updateUserInfo (state, payload) {
+      state.userInfo = payload
+    },
     updateGroupList (state, payload) {
       state.groupList = payload
     },

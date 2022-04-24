@@ -492,7 +492,7 @@ export default {
 
 
         // c10y is means -> constituency
-        let eventString = startDateTimestamp + " >c10y_:< " + endDateTimestamp + " >c10y_:< " + eventTitle + " >c10y_:< " + eventText + " >c10y_:< " + eventColor
+        let eventString = startDateTimestamp + " >c10y_:< " + endDateTimestamp + " >c10y_:< " + eventTitle + " >c10y_:< " + eventText + " >c10y_:< " + eventColor + " >c10y_:< " + this.$store.state.userInfo.userAvatar
 
 
 
@@ -545,7 +545,7 @@ export default {
                     eventText: eventText,
                     eventTitle: eventTitle,
                     startTime: parseInt(startDateTimestamp),
-                    userAvatar: "",
+                    userAvatar: this.$store.state.userInfo.userAvatar,
                     userName: username,
                     userType: 0,
                   }
@@ -576,7 +576,7 @@ export default {
                     eventText: eventText,
                     eventTitle: eventTitle,
                     startTime: parseInt(startDateTimestamp),
-                    userAvatar: "",
+                    userAvatar: this.$store.state.userInfo.userAvatar,
                     userName: username,
                     userType: 0,
                   }
@@ -640,9 +640,9 @@ export default {
 
   overflow-y: auto;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /*display: grid;*/
+  /*align-items: center;*/
+  /*justify-items: center;*/
 }
 /* 修改滚动条样式 */
 .eventCardBox::-webkit-scrollbar {
@@ -667,7 +667,7 @@ export default {
 .addEventBox {
   position: sticky;
   top: var(--zero-pixel);
-  right: var(--zero-pixel);
+  left: 10px;
 
   width: var(--add-event-box-widht);
   height: var(--add-event-box-height);

@@ -93,7 +93,9 @@ export default {
     offlineMessageUrl(){ return "http://" + this.$store.state.serverAddress + "/messagepull/getofflinemessage"},
 
     getGroupListUrl(){ return "http://" + this.$store.state.serverAddress + "/group?userId="},
-    checkTokenUrl(){ return "http://" + this.$store.state.serverAddress + "/user/tokenCheck"}
+    checkTokenUrl(){ return "http://" + this.$store.state.serverAddress + "/user/tokenCheck"},
+
+    userInfoUrl(){ return "http://" + this.$store.state.serverAddress + "/user/info?uuid="},
   },
   methods: {
     openSignInPopup: function (){
@@ -150,6 +152,23 @@ export default {
         this.signUpVisible = false
       })
     },
+    getUserInfo() {
+      let cookie = document.cookie
+      if (cookie !== '') {
+        // 从cookie中获取uuid和token
+        let trueCookie = ''
+        cookie.split('; ').forEach(ogtCookie => {
+          if (ogtCookie.indexOf('userinfo=') !== -1) {
+            trueCookie = ogtCookie
+          }
+        })
+        let cookieArray = (trueCookie.split('=')[1]).split('-');
+        let userId = cookieArray[1]
+        this.Axios.get(this.userInfoUrl + userId).then(userinfo => {
+          this.$store.commit('updateUserInfo', userinfo.data)
+        })
+      }
+    },
     checkLoginStatus (){
       // 获取cookie
       let cookie = document.cookie
@@ -179,6 +198,7 @@ export default {
               this.$store.commit('updateGroupList',groups.data)
             })
           }
+          this.getUserInfo()
           this.connectWsServer()
         })
 
@@ -291,7 +311,7 @@ export default {
                   eventText: eventArray[3],
                   eventTitle: eventArray[2],
                   startTime: parseInt(eventArray[0]),
-                  userAvatar: "",
+                  userAvatar: eventArray[5],
                   userName: messagePrivate.usernameFrom,
                   userType: 0,
                 }

@@ -2,8 +2,8 @@
   <div class="eventCard">
     <div class="userBox">
       <div class="userAvatarBox">
-        <div class="userAvatar">
-          <img class="userAvatarImg" :src="this.$props.event.userAvatar" :alt="this.$props.event.userName">
+        <div class="userAvatar" :class="'eventUserAvatarImg' + this.$props.event.eventId" >
+          {{this.$props.event.eventId === '' ? this.$props.event.userName : ''}}
         </div>
       </div>
 
@@ -39,7 +39,17 @@ export default {
     event: Object
   },
   methods: {
+    setEventSenderAvatar() {
+      let eventSenderAvatarList = document.getElementsByClassName('eventUserAvatarImg' + this.$props.event.eventId)
 
+      for(let i = 0; i < eventSenderAvatarList.length; i++) {
+        eventSenderAvatarList[i].style.backgroundImage = `url("${this.$props.event.userAvatar}")`
+      }
+
+    }
+  },
+  mounted() {
+    this.setEventSenderAvatar()
   }
 }
 </script>
@@ -75,6 +85,7 @@ export default {
 }
 
 .eventCard {
+  margin-left: 10px;
   width: var(--event-card-width);
   /*height: 340px;*/
   margin-top: var(--event-card-margin-top);
@@ -115,6 +126,9 @@ export default {
 
   border-radius: 100%;
   background-color: gray;
+
+  background-size: cover;
+  background-repeat:no-repeat;
 
   overflow: hidden;
 }

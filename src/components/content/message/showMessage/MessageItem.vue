@@ -1,7 +1,7 @@
 <template>
   <div class="message" v-if="this.$props.message.messageType !== '2'">
     <div class="messageUserAvatar">
-      <div class="messageUserAvatarBox" @click="gotoUserPage(this.$props.message.uuidFrom)"></div>
+      <div class="messageUserAvatarBox" :class="'messageSenderAvatar' + this.$props.message.uuidFrom" @click="gotoUserPage(this.$props.message.uuidFrom)"></div>
     </div>
     <div class="messageBox">
       <div class="messageUserInfo" @click="gotoUserPage(this.$props.message.uuidFrom)">{{this.$props.message.usernameFrom}}</div>
@@ -16,10 +16,27 @@ export default {
   props: {
     message: Object
   },
+  computed: {
+    userInfoUrl(){ return "http://" + this.$store.state.serverAddress + "/user/info?uuid="},
+  },
   methods: {
     gotoUserPage(userId) {
       this.$router.push(`/user/${userId}`)
+    },
+    setMessageSenderAvatar() {
+
+      this.Axios.get(this.userInfoUrl + this.$props.message.uuidFrom).then(userinfo => {
+        let userAvatarList = document.getElementsByClassName('messageSenderAvatar' + this.$props.message.uuidFrom)
+        console.log('userAvatarList', userAvatarList)
+        for(let i = 0; i < userAvatarList.length; i++){
+          userAvatarList[i].style.backgroundImage = `url("${userinfo.data.userAvatar}")`
+        }
+      })
+
     }
+  },
+  mounted() {
+    this.setMessageSenderAvatar()
   }
 }
 </script>
@@ -58,6 +75,9 @@ export default {
 
   cursor: pointer;
 
+  background-size: cover;
+  background-repeat:no-repeat;
+
   background-color: white;
 }
 
@@ -81,7 +101,7 @@ export default {
 }
 
 .messageMessage {
-  font-size: 18;
+  font-size: 16px;
   color: var(--little-gray-white);
 }
 

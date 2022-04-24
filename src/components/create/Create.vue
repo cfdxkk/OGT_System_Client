@@ -46,9 +46,6 @@ export default {
   name: "Create",
   data: () => {
     return {
-      // hostAddress: "150.158.98.146:8888",
-      hostAddress: "localhost:8888",
-
 
       show: false,
       params: {

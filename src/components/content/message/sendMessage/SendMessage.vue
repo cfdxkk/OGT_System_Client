@@ -123,6 +123,7 @@ export default {
           token: token,
           messageType: '1',
           message: messageInput,
+
         }
 
         let messagePrivate = {

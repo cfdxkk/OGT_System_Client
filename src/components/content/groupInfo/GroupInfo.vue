@@ -5,7 +5,7 @@
     <div class="groupUserBox">
 
       <div class="groupUserItemBox"  v-for="activeGroupNumber in this.$store.state.activeGroupNumbersInfo" :key="activeGroupNumber.userId">
-        <div class="groupUserAvatarBox" @click="gotoUser(activeGroupNumber.userId)"></div>
+        <div class="groupUserAvatarBox" @click="gotoUser(activeGroupNumber.userId)" :style="{backgroundImage: `url('${activeGroupNumber.userAvatar}')`, backgroundSize: 'cover', backgroundPosition: 'center'}"></div>
 
         <div class="groupUserInfoBox">
           <div class="groupUserAdminCardBox" v-if="activeGroupNumber.userIdentityInGroup === 2">管理员</div>

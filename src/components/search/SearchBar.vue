@@ -14,7 +14,7 @@
     <div class="resultGroupPart">
       <div class="resultGroupBox">
         <div class="resultGroupCard" v-for="group in this.groups" :key="group">
-          <div class="groupImage"><div class="groupImageCard">{{group.groupImage}}</div></div>
+          <div class="groupImage"><div class="groupImageCard" :style="{backgroundImage: `url('${group.groupAvatar}')`, backgroundSize: 'cover', backgroundPosition: 'center'}"></div></div>
           <div class="groupText">
             <div class="groupNameCard">{{group.groupName}}</div>
             <div class="groupIntroduceCard">{{group.groupIntroduction}}</div>

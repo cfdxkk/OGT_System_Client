@@ -89,12 +89,16 @@ export default {
 
   /*background-color: red;*/
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*justify-content: center;*/
 }
 
 .messageUserInfo {
+
+  width: auto;
+  display: inline;
+
   font-size: 14px;
   color: var(--little-blue-white2);
   cursor: pointer;

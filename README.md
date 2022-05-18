@@ -24,8 +24,12 @@ git clone git@github.com:cfdxkk/OGT_System_Client.git
 ```
 1. 根据自己的实际情况修改各种连接的地址且确保[后端API](https://github.com/cfdxkk/OGT_System_API "OGT_System_API")和数据库工作正常</br>
    (Check the [OGT_System_API server](https://github.com/cfdxkk/OGT_System_API "OGT_System_API") and DBs were running alright)
-2. 在控制台输入下方命令检查node是否正确安装，如果没安装清自行安装[Node](https://nodejs.org/en/)</br>
-   (Enter following command in your Termina to check Node.js was installed in your PC. If not, you can [Click Here To Download Node](https://nodejs.org/en/))
+2. 将 `scr/store/index.js` 中的 `wsServerAddress` 和 `serverAddress` 设为合适的地址
+
+   (Make sure the Address of `wsServerAddress` and `serverAddress` in `scr/store/index.js` are Correctly)
+3. 在控制台输入下方命令检查node是否正确安装；如果没有，清自行安装 [Node.js](https://nodejs.org/en/)
+
+   (Enter following command in your Termina to check Node.js was installed in your PC. If not, you can [Click Here To Download Node.js](https://nodejs.org/en/))
 ```
 node -v
 ```
@@ -36,13 +40,13 @@ node -v
 ```
 npm install
 ```
-5-1. 在控制台输入以下代码编译为开发者及热重载模式</br>
-     (Enter following command in your Termina to Compiles and hot-reloads for development)
+5. [开发环境] 在控制台输入以下代码编译为开发者及热重载模式</br>
+   ([dev mode]Enter following command in your Termina to Compiles and hot-reloads for development)
 ```
 npm run serve
 ```
-5-2 在控制台输入以下代码编译为生产环境和(代码体积)压缩格式</br>
-    (Enter following command in your Termina to Compiles and minifies for production)
+6. [生产环境] 在控制台输入以下代码编译为生产环境和(代码体积)压缩格式</br>
+   ([product mode]Enter following command in your Termina to Compiles and minifies for production)
 ```
 npm run build
 ```

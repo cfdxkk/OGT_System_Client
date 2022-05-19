@@ -36,19 +36,19 @@ git clone git@github.com:cfdxkk/OGT_System_Client.git
 ```
 node -v
 ```
-3. 打开终端并定位到正确的目录 (package.json所在的目录)</br>
+4. 打开终端并定位到正确的目录 (package.json所在的目录)</br>
    (Go-to right folder. U can see package.json)
-4. 在控制台输入以下代码安装项目运行依赖</br>
+5. 在控制台输入以下代码安装项目运行依赖</br>
    (Enter following command in your Termina to install, then press Enter key)
 ```
 npm install
 ```
-5. [开发环境] 在控制台输入以下代码编译为开发者及热重载模式</br>
+6. [开发环境] 在控制台输入以下代码编译为开发者及热重载模式</br>
    ([dev mode]Enter following command in your Termina to Compiles and hot-reloads for development)
 ```
 npm run serve
 ```
-6. [生产环境] 在控制台输入以下代码编译为生产环境和(代码体积)压缩格式</br>
+7. [生产环境] 在控制台输入以下代码编译为生产环境和(代码体积)压缩格式</br>
    ([product mode]Enter following command in your Termina to Compiles and minifies for production)
 ```
 npm run build

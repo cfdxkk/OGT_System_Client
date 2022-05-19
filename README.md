@@ -3,9 +3,9 @@ OGT系统是用来与好友预定游戏时间，或由队长来策划并发布�
 ***
 此存储库为 OGT_System 的Web客户端代码，由 `JavaScript -> Vue` 编写
 
-在编写本系统的后期，因为要赶毕设的进度，产生了大量 _不优雅_ 的代码；所以这个项目未来会继续改进;
-
 实现了用户与用户，用户与群组之间发送消息的基础功能，使用 `IndexedDB` 实现了浏览器端的消息记录缓存
+
+在编写本系统的后期，因为要赶毕设的进度，产生了大量 _不优雅_ 的代码；所以这个项目未来会继续改进
 
 基于:
 ```
@@ -20,7 +20,7 @@ IndexedDB
 ```
 ***
 ## 启动项目 Project setup
-0. 克隆当前项目，在控制台输入以下命令 (请确认你使用的设备的ssh密钥已与Github链接)</br>
+0. 在控制台输入以下命令克隆当前项目 (请确认你使用的设备的ssh密钥已与Github链接)</br>
    (Enter following command in your Termina to clone this Repositories)
 ```
 git clone git@github.com:cfdxkk/OGT_System_Client.git

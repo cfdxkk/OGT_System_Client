@@ -54,7 +54,7 @@ npm run serve
 npm run build
 ```
 ***
-#### 修复损坏的文件 Lints and fixes files
+#### 整理文件 Lints and fixes files
 ```
 npm run lint
 ```
